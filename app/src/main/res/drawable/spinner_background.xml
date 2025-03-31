@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Fondo con forma -->
+    <item>
+        <layer-list>
+            <item>
+                <shape>
+                    android:shape="rectangle">
+                    <corners android:radius="8dp"/>
+                    <solid android:color="@color/colorEditTxt"/>
+                    <padding android:left="16dp" android:top="16dp" android:right="16dp" android:bottom="16dp"/>
+                </shape>
+            </item>
+            <item
+                android:drawable="@drawable/arrow"
+                android:gravity="end">
+
+            </item>
+        </layer-list>
+    </item>
+</selector>
