@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">ProyectoZ</string>
     <string name="olvideContrasena"><u>¿Olvidaste tu contraseña?</u></string>
+    <string name="desc_imagenClases">Apartado de clases</string>
+    <string name="desc_imagenPerfil">Apartado de perfil</string>
+    <string name="desc_imagenActividades">Apartado de actividades</string>
+    <string name="desc_imagenGrupos">Apartado de grupos</string>
 </resources>

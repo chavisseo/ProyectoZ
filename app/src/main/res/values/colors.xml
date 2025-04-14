@@ -6,4 +6,6 @@
     <color name="colorButton">#02A9F7</color>
     <color name="colorButtonPressed">#0084C3</color>
     <color name="colorEditTxt">#F0F1F2</color>
+    <color name="colorAzulMenu">#01303F</color>
+    <color name="colorBlancoMenu">#F0F1F2</color>
 </resources>
