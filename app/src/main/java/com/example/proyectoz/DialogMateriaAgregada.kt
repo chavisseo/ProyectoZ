@@ -30,6 +30,7 @@ class DialogMateriaAgregada : DialogFragment() {
                 replace(R.id.fragmentContainer, fragmentMaterias)
                 addToBackStack(null)
                 commit()
+
             }
         }
 
