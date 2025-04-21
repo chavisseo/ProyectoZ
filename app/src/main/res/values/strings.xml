@@ -6,4 +6,5 @@
     <string name="desc_imagenActividades">Apartado de actividades</string>
     <string name="desc_imagenGrupos">Apartado de grupos</string>
     <string name="desc_imagenAgregar">Agregar</string>
+    <string name="desc_buscarMateria">Buscar materia</string>
 </resources>

@@ -8,4 +8,6 @@
     <color name="colorEditTxt">#F0F1F2</color>
     <color name="colorAzulMenu">#01303F</color>
     <color name="colorBlancoMenu">#F0F1F2</color>
+    <color name="colorVerdeCheck">#3FB960</color>
+    <color name="colorVerdeCheckPressed">#247137</color>
 </resources>
