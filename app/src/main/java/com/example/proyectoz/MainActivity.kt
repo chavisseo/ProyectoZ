@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity() {
         btnRegister.setOnClickListener(){
             val intent = Intent(this, SignUp::class.java)
             startActivity(intent)
-
         }
     }
 }
