@@ -1,47 +1,35 @@
 package com.example.proyectoz
 
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
+import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 
 class DialogMateriaAgregada : DialogFragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.dialog_materia_agregada, container, false)
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        // Inflas el layout
+        val view = LayoutInflater.from(requireContext())
+            .inflate(R.layout.dialog_materia_agregada, null)
 
-        // Borde transparente para que se vean las esquinas redondeadas
-        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        // Construyes el AlertDialog
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(view)
+            .create()
 
-        // Listener del botón
-        view.findViewById<Button>(R.id.btnAceptar).setOnClickListener {
-            val fragmentMaterias = FragmentMaterias()
+        // Botón Aceptar: cierra el diálogo
+        view.findViewById<Button>(R.id.btnAceptar)
+            .setOnClickListener { dismiss() }
 
-            //dismiss()
-            requireActivity().supportFragmentManager.beginTransaction().apply {
-                replace(R.id.fragmentContainer, fragmentMaterias)
-                addToBackStack(null)
-                commit()
-
-            }
-        }
-
-        return view
+        return dialog
     }
 
-    override fun onStart() {
-        super.onStart()
-        dialog?.window?.setLayout(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        // Al cerrar (Aceptar o BACK), volvemos al FragmentMenu
+        requireActivity().supportFragmentManager.popBackStack()
     }
 }

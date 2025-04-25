@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.cardview.widget.CardView
+import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 
 class FragmentMaterias : Fragment() {
@@ -18,16 +18,22 @@ class FragmentMaterias : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val cardAgregar = view.findViewById<CardView>(R.id.cardAgregar)
+        val flAgregar = view.findViewById<FrameLayout>(R.id.flAgregar)
+        val flPerfil = view.findViewById<FrameLayout>(R.id.flPerfil)
 
-        cardAgregar.setOnClickListener(){
-            val fragmentAgregarMateria = FragmentAgregarMateria()
+        flAgregar.setOnClickListener {
+            // Ripple + navegación
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, FragmentAgregarMateria())
+                .addToBackStack(null)
+                .commit()
+        }
 
-            requireActivity().supportFragmentManager.beginTransaction().apply {
-                replace(R.id.fragmentContainer, fragmentAgregarMateria)
-                addToBackStack(null)
-                commit()
-            }
+        flPerfil.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, FragmentAgregarMateria())
+                .addToBackStack(null)
+                .commit()
         }
     }
 }
