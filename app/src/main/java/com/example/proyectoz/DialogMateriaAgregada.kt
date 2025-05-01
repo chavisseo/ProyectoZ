@@ -25,6 +25,7 @@ class DialogMateriaAgregada : DialogFragment() {
             .setOnClickListener { dismiss() }
 
         return dialog
+
     }
 
     override fun onDismiss(dialog: DialogInterface) {
