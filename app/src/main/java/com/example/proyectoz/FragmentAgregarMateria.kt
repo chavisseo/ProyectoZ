@@ -20,12 +20,11 @@ class FragmentAgregarMateria : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val btnAgregarMateria = view.findViewById<Button>(R.id.btnAgregarMateria)
-
-        btnAgregarMateria.setOnClickListener(){
+        btnAgregarMateria.setOnClickListener {
+            // Mostrar el diálogo usando el FragmentManager de la Activity
             val dialog = DialogMateriaAgregada()
-            dialog.show(childFragmentManager, "success_dialog")
+            dialog.isCancelable = true
+            dialog.show(requireActivity().supportFragmentManager, "success_dialog")
         }
-
     }
-
 }
