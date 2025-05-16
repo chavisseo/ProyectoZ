@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_agregar_clases"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:gravity="center">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardAgregarClase"
+        android:layout_width="370dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        app:cardUseCompatPadding="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:padding="20dp">
+
+            <!-- Título -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Agregar clase"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:paddingBottom="12dp" />
+
+            <!-- Carrera -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Carrera"
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                android:gravity="start" />
+
+            <EditText
+                android:id="@+id/inputCarrera"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="4dp"
+                android:padding="8dp"
+                android:textSize="14sp"
+                android:background="@drawable/rounded_edittxt"
+                android:gravity="start"
+                android:textColor="@color/black" />
+
+            <!-- Semestre -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Semestre"
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                android:gravity="start" />
+
+            <EditText
+                android:id="@+id/inputSemestre"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="4dp"
+                android:inputType="number"
+                android:padding="8dp"
+                android:textSize="14sp"
+                android:background="@drawable/rounded_edittxt"
+                android:gravity="start"
+                android:textColor="@color/black" />
+
+            <!-- Grupo -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Grupo"
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                android:gravity="start" />
+
+            <EditText
+                android:id="@+id/inputGrupo"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="4dp"
+                android:padding="8dp"
+                android:textSize="14sp"
+                android:background="@drawable/rounded_edittxt"
+                android:gravity="start"
+                android:textColor="@color/black" />
+
+            <!-- Escuela -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Escuela"
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                android:gravity="start" />
+
+            <EditText
+                android:id="@+id/inputEscuela"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="4dp"
+                android:padding="8dp"
+                android:textSize="14sp"
+                android:background="@drawable/rounded_edittxt"
+                android:gravity="start"
+                android:textColor="@color/black" />
+
+            <!-- Botón Agregar Clase -->
+            <Button
+                android:id="@+id/btnAgregarClase"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginTop="20dp"
+                android:padding="5dp"
+                android:text="Agregar clase"
+                android:textSize="16sp"
+                android:background="@drawable/rounded_button"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

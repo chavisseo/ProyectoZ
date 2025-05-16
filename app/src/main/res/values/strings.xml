@@ -4,7 +4,10 @@
     <string name="desc_imagenClases">Apartado de clases</string>
     <string name="desc_imagenPerfil">Apartado de perfil</string>
     <string name="desc_imagenActividades">Apartado de actividades</string>
-    <string name="desc_imagenGrupos">Apartado de grupos</string>
+    <string name="desc_imagenMaterias">Apartado de materias</string>
     <string name="desc_imagenAgregar">Agregar</string>
     <string name="desc_buscarMateria">Buscar materia</string>
+    <string name="desc_imagenEscuelas">Apartado de Escuelas</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

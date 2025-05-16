@@ -23,21 +23,21 @@ class FragmentMenu : Fragment() {
 
         // Buscamos los 4 FrameLayout que envuelven cada tarjeta
         val flClases = view.findViewById<FrameLayout>(R.id.flClases)
-        val flPerfil = view.findViewById<FrameLayout>(R.id.flPerfil)
+        val flEscuelas = view.findViewById<FrameLayout>(R.id.flEscuelas)
         val flActividades = view.findViewById<FrameLayout>(R.id.flActividades)
-        val flGrupos = view.findViewById<FrameLayout>(R.id.flGrupos)
+        val flMaterias = view.findViewById<FrameLayout>(R.id.flMaterias)
 
         // Cada FrameLayout navega al fragment correspondiente
         flClases.setOnClickListener {
-            navigateTo(FragmentMaterias())
+            navigateTo(FragmentClases())
         }
-        flPerfil.setOnClickListener {
+        flEscuelas.setOnClickListener {
             navigateTo(FragmentMaterias())
         }
         flActividades.setOnClickListener {
             navigateTo(FragmentMaterias())
         }
-        flGrupos.setOnClickListener {
+        flMaterias.setOnClickListener {
             navigateTo(FragmentMaterias())
         }
     }
