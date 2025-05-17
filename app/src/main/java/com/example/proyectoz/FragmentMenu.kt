@@ -32,7 +32,7 @@ class FragmentMenu : Fragment() {
             navigateTo(FragmentClases())
         }
         flEscuelas.setOnClickListener {
-            navigateTo(FragmentMaterias())
+            navigateTo(FragmentEscuelas())
         }
         flActividades.setOnClickListener {
             navigateTo(FragmentMaterias())
