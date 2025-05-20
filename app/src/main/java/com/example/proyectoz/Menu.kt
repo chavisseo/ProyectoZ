@@ -1,10 +1,14 @@
 package com.example.proyectoz
 
 import android.os.Bundle
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.firebase.auth.FirebaseAuth
+
+private lateinit var auth: FirebaseAuth
 
 class Menu : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,12 +21,23 @@ class Menu : AppCompatActivity() {
             insets
         }
 
+        //variables
+        val textoBienvenida = findViewById<TextView>(R.id.textSuperior)
+        val usuario = FirebaseAuth.getInstance().currentUser
+
+
         if (savedInstanceState == null){
             val fragmentEscuelas = FragmentEscuelas()
             supportFragmentManager.beginTransaction().add(R.id.fragmentContainer, fragmentEscuelas)
                 .commit()
         }
 
+        if(usuario != null){
+
+            textoBienvenida.text = "Hola, ${usuario.displayName}"
+        }else{
+            textoBienvenida.text = "Hola, Perro"
+        }
      /*  val clasesCardView = findViewById<CardView>(R.id.cardClases)
         clasesCardView.setOnClickListener(){
             val intent = Intent(this, Materias::class.java)
