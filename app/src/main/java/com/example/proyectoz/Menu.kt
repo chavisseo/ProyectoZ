@@ -1,11 +1,8 @@
 package com.example.proyectoz
 
-import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
@@ -21,8 +18,8 @@ class Menu : AppCompatActivity() {
         }
 
         if (savedInstanceState == null){
-            val fragmentMenu = FragmentMenu()
-            supportFragmentManager.beginTransaction().add(R.id.fragmentContainer, fragmentMenu)
+            val fragmentEscuelas = FragmentEscuelas()
+            supportFragmentManager.beginTransaction().add(R.id.fragmentContainer, fragmentEscuelas)
                 .commit()
         }
 

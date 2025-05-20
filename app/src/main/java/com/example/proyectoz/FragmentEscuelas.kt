@@ -31,7 +31,7 @@ class FragmentEscuelas : Fragment() {
 
         flPerfil.setOnClickListener {
             requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, FragmentAgregarEscuelas())
+                .replace(R.id.fragmentContainer, FragmentClases())
                 .addToBackStack(null)
                 .commit()
         }

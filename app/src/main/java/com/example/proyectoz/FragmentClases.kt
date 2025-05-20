@@ -31,7 +31,7 @@ class FragmentClases : Fragment() {
 
         flPerfil.setOnClickListener {
             requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, FragmentAgregarClases())
+                .replace(R.id.fragmentContainer, FragmentMaterias())
                 .addToBackStack(null)
                 .commit()
         }
