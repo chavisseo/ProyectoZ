@@ -115,6 +115,8 @@
                 android:textSize="14sp"
                 android:background="@drawable/rounded_edittxt"
                 android:gravity="start"
+                android:focusable="false"
+                android:clickable="false"
                 android:textColor="@color/black" />
 
             <!-- Botón Agregar Clase -->

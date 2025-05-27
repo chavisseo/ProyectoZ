@@ -44,4 +44,9 @@ class Menu : AppCompatActivity() {
             startActivity(intent)
         }*/
     }
+
+    fun actualizarTextoInferior(nuevoTexto: String) {
+        val label = findViewById<TextView>(R.id.textInferior)
+        label.text = nuevoTexto
+    }
 }

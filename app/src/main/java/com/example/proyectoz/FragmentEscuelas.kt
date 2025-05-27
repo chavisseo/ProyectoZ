@@ -60,6 +60,8 @@ class FragmentEscuelas : Fragment() {
                 .addToBackStack(null)
                 .commit()
         }
+
+        (activity as? Menu)?.actualizarTextoInferior("¿Qué actividad harás hoy?")
     }
 
     fun obtenerEscuelas(){
@@ -173,6 +175,19 @@ class FragmentEscuelas : Fragment() {
             }
             text = texto
             textSize = 16f
+        }
+
+        frameLayout.setOnClickListener {
+            val bundle = Bundle().apply {
+                putString("nombre", texto)
+            }
+            val fragmentClases = FragmentClases()
+            fragmentClases.arguments = bundle
+
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, fragmentClases)
+                .addToBackStack(null)
+                .commit()
         }
 
         linear.addView(imageView)
