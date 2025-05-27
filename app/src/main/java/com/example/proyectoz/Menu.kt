@@ -1,6 +1,8 @@
 package com.example.proyectoz
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -8,7 +10,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.firebase.auth.FirebaseAuth
 
-private lateinit var auth: FirebaseAuth
+
 
 class Menu : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,6 +26,8 @@ class Menu : AppCompatActivity() {
         //variables
         val textoBienvenida = findViewById<TextView>(R.id.textSuperior)
         val usuario = FirebaseAuth.getInstance().currentUser
+        val imagen = findViewById<ImageButton>(R.id.imageButton)
+
 
 
         if (savedInstanceState == null){
@@ -37,6 +41,14 @@ class Menu : AppCompatActivity() {
             textoBienvenida.text = "Hola, ${usuario.displayName}"
         }else{
             textoBienvenida.text = "Hola, Perro"
+        }
+
+        imagen.setOnClickListener {
+            val logoutFragment = FragmentLogout()
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, logoutFragment)
+                .addToBackStack(null) // opcional, para volver atrás
+                .commit()
         }
      /*  val clasesCardView = findViewById<CardView>(R.id.cardClases)
         clasesCardView.setOnClickListener(){
