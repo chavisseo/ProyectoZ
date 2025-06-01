@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Fila 1: Tarjetas estáticas -->
+        <!-- Fila 1: Mantener espacio de dos tarjetas -->
         <LinearLayout
             android:id="@+id/fila1"
             android:layout_width="match_parent"
@@ -60,45 +60,12 @@
                 </FrameLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Card 2: Perfil -->
-            <androidx.cardview.widget.CardView
+            <!-- Espacio vacío para simular la segunda tarjeta -->
+            <Space
                 android:layout_width="0dp"
                 android:layout_height="150dp"
                 android:layout_weight="1"
-                android:layout_marginStart="4dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="8dp"
-                app:cardUseCompatPadding="true">
-
-                <FrameLayout
-                    android:id="@+id/flPerfil"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:foreground="?attr/selectableItemBackground">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="60dp"
-                            android:layout_height="60dp"
-                            android:src="@drawable/perfilbtn"
-                            android:contentDescription="@string/desc_imagenPerfil" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Perfil"
-                            android:textSize="16sp"
-                            android:layout_marginTop="8dp" />
-                    </LinearLayout>
-                </FrameLayout>
-            </androidx.cardview.widget.CardView>
+                android:layout_marginStart="4dp" />
         </LinearLayout>
 
         <!-- Aquí se agregarán las tarjetas dinámicas -->
@@ -106,7 +73,6 @@
             android:id="@+id/containerEscuelas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-           />
+            android:orientation="vertical" />
     </LinearLayout>
 </ScrollView>

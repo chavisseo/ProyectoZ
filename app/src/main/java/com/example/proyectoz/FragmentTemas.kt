@@ -72,7 +72,10 @@ class FragmentTemas : Fragment(){
                     Log.d("prueba", "Este $tema1")*/
                 }
 
-                agregarTarjetasDinamicas(listaNumeros, requireContext(), container, listaNombres)
+                if(isAdded){
+                    agregarTarjetasDinamicas(listaNumeros, requireContext(), container, listaNombres)
+                }
+
 
             }
 

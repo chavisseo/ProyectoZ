@@ -41,7 +41,6 @@ class FragmentEscuelas : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val flAgregar = view.findViewById<FrameLayout>(R.id.flAgregar)
-        val flPerfil = view.findViewById<FrameLayout>(R.id.flPerfil)
 
         obtenerEscuelas()
         //val container = view.findViewById<LinearLayout>(R.id.containerEscuelas)
@@ -54,12 +53,6 @@ class FragmentEscuelas : Fragment() {
                 .commit()
         }
 
-        flPerfil.setOnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, FragmentClases())
-                .addToBackStack(null)
-                .commit()
-        }
 
         (activity as? Menu)?.actualizarTextoInferior("¿Qué actividad harás hoy?")
     }
@@ -74,7 +67,10 @@ class FragmentEscuelas : Fragment() {
                         listaNombres.add(nombre)
                     }
                 }
-                agregarTarjetasDinamicas(listaNombres, requireContext(), container)
+                if(isAdded){
+                    agregarTarjetasDinamicas(listaNombres, requireContext(), container)
+                }
+
             }
     }
 

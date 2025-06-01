@@ -35,10 +35,12 @@ class MainActivity : AppCompatActivity() {
         btnLogin.setOnClickListener(){
             val intent = Intent(this, SignIn::class.java)
             startActivity(intent)
+            finish()
         }
         btnRegister.setOnClickListener(){
             val intent = Intent(this, SignUp::class.java)
             startActivity(intent)
+            finish()
         }
     }
 }

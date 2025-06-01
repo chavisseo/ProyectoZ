@@ -141,6 +141,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
+        <!-- Espacio izquierdo -->
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <!-- Botón Inicio -->
         <ImageButton
             android:id="@+id/btnHome"
             android:layout_width="0dp"
@@ -150,23 +157,12 @@
             android:background="@android:color/transparent"
             android:contentDescription="Inicio" />
 
-        <ImageButton
-            android:id="@+id/btnClases"
+        <!-- Espacio derecho -->
+        <Space
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:src="@drawable/clasesbar"
-            android:background="@android:color/transparent"
-            android:contentDescription="Clases" />
-
-        <ImageButton
-            android:id="@+id/btnPerfil"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:src="@drawable/perfilbar"
-            android:background="@android:color/transparent"
-            android:contentDescription="Perfil" />
+            android:layout_weight="1" />
     </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

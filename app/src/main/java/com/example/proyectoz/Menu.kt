@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.FragmentManager
 import com.google.firebase.auth.FirebaseAuth
 
 
@@ -27,6 +28,7 @@ class Menu : AppCompatActivity() {
         val textoBienvenida = findViewById<TextView>(R.id.textSuperior)
         val usuario = FirebaseAuth.getInstance().currentUser
         val imagen = findViewById<ImageButton>(R.id.imageButton)
+        val btnHome = findViewById<ImageButton>(R.id.btnHome)
 
 
 
@@ -50,15 +52,30 @@ class Menu : AppCompatActivity() {
                 .addToBackStack(null) // opcional, para volver atrás
                 .commit()
         }
-     /*  val clasesCardView = findViewById<CardView>(R.id.cardClases)
-        clasesCardView.setOnClickListener(){
-            val intent = Intent(this, Materias::class.java)
-            startActivity(intent)
-        }*/
+
+        btnHome.setOnClickListener {
+            supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, FragmentEscuelas())
+                .commit()
+        }
+
     }
 
     fun actualizarTextoInferior(nuevoTexto: String) {
         val label = findViewById<TextView>(R.id.textInferior)
         label.text = nuevoTexto
     }
+
+    override fun onBackPressed() {
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
+        if(currentFragment is FragmentEscuelas){
+            finish()
+        }else{
+            super.onBackPressed()
+        }
+
+    }
+
+
 }

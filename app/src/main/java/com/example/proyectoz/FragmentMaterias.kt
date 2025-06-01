@@ -40,7 +40,6 @@ class FragmentMaterias : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val flAgregar = view.findViewById<FrameLayout>(R.id.flAgregar)
-        val flPerfil = view.findViewById<FrameLayout>(R.id.flPerfil)
         nombreCarrera = arguments?.getString("carrera")
         (activity as? Menu)?.actualizarTextoInferior("Te encuentras dentro de $nombreCarrera")
 
@@ -62,12 +61,7 @@ class FragmentMaterias : Fragment() {
                 .commit()
         }
 
-        flPerfil.setOnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, FragmentAgregarMateria())
-                .addToBackStack(null)
-                .commit()
-        }
+
     }
 
     fun obtenerClases(){
@@ -91,7 +85,10 @@ class FragmentMaterias : Fragment() {
                 }
 
                 //agregarTarjetasDinamicas
-                agregarTarjetasDinamicas(listaNombres, requireContext(), container, listaClaves)
+                if(isAdded){
+                    agregarTarjetasDinamicas(listaNombres, requireContext(), container, listaClaves)
+                }
+
             }
     }
 
