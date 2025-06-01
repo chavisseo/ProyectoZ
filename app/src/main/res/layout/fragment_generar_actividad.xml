@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_generar_actividad"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:gravity="center">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="16dp">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardGenerarActividad"
+                android:layout_width="370dp"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    android:padding="20dp">
+
+                    <!-- Título -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Generar Actividad"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:paddingBottom="12dp" />
+
+                    <!-- Actividad -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Actividad"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:gravity="start" />
+
+                    <!-- EditText con scroll interno -->
+                    <TextView
+                        android:id="@+id/inputActividad"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:gravity="start|top"
+                    android:textSize="14sp"
+
+                    android:background="@drawable/rounded_edittxt"
+                    android:textColor="@color/black"
+                    android:inputType="textMultiLine"
+
+
+                    android:scrollbars="vertical" />
+
+                    <!-- Separación -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="16dp" />
+
+                    <!-- Botón -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_horizontal"
+                        android:padding="20dp"
+                        >
+
+                        <Button
+                            android:id="@+id/btnGenerarActividad"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="20dp"
+                            android:padding="5dp"
+                            android:text="Generar"
+                            android:textSize="16sp"
+                            android:background="@drawable/rounded_button"
+                            android:textColor="@color/white"
+                            android:layout_marginEnd="10dp"/>
+
+                        <Button
+                            android:id="@+id/btnGenerarPDF"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="20dp"
+                            android:padding="5dp"
+                            android:text="PDF"
+                            android:textSize="16sp"
+                            android:background="@drawable/rounded_button"
+                            android:textColor="@color/white" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

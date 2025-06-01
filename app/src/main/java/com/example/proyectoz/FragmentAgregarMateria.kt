@@ -12,14 +12,13 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import com.google.firebase.Firebase
 import com.google.firebase.FirebaseApp
 import com.google.firebase.ai.ai
 import com.google.firebase.ai.type.GenerativeBackend
 import com.google.firebase.ai.type.content
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 
 class FragmentAgregarMateria : Fragment() {
@@ -33,6 +32,7 @@ class FragmentAgregarMateria : Fragment() {
     private var respuesta: String? = null
     private var nombreClase: String? = null
     private var archivoSeleccionado: Boolean? = false
+    private val listaTemas = mutableListOf<String>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -99,8 +99,15 @@ class FragmentAgregarMateria : Fragment() {
             }
 
             if(clave.isNotEmpty() && nombre.isNotEmpty() && semestre.isNotEmpty()
-                && nombreClase!=null){
+                && nombreClase!=null && listaTemas.isNotEmpty()){
                 //Crear el objeto
+
+                val hash = listaTemas.mapIndexed { index, elemento ->
+                    (index + 1).toString() to elemento
+                }.toMap(HashMap())
+
+                hash.put("clave", clave)
+
                 val materia = hashMapOf(
                     "clave" to clave,
                     "nombre" to nombre,
@@ -111,10 +118,18 @@ class FragmentAgregarMateria : Fragment() {
 
                 db.collection("Materias")
                     .add(materia).addOnSuccessListener {
-                        // Mostrar el diálogo usando el FragmentManager de la Activity
-                        val dialog = DialogMateriaAgregada()
-                        dialog.isCancelable = true
-                        dialog.show(requireActivity().supportFragmentManager, "success_dialog")
+
+                        db.collection("Temas")
+                            .add(hash).addOnSuccessListener {
+                                // Mostrar el diálogo usando el FragmentManager de la Activity
+                                val dialog = DialogMateriaAgregada()
+                                dialog.isCancelable = true
+                                dialog.show(requireActivity().supportFragmentManager, "success_dialog")
+                            }
+                            .addOnFailureListener {
+                                Toast.makeText(requireContext(), "Error al guardar: ${it.message}", Toast.LENGTH_SHORT).show()
+                            }
+
                     }
                     .addOnFailureListener {
                         Toast.makeText(requireContext(), "Error al guardar: ${it.message}", Toast.LENGTH_SHORT).show()
@@ -131,32 +146,49 @@ class FragmentAgregarMateria : Fragment() {
 
         if(uri != null){
             val contentResolver = requireContext().applicationContext.contentResolver
-            val inputStream = contentResolver.openInputStream(uri)
+            var contador = 1
 
-            if(inputStream != null){
-                inputStream.use { stream ->
-                    val prompt = content {
-                        inlineData(
-                            bytes = stream.readBytes(),
-                            mimeType = "application/pdf"
-                        )
-                        text("Te compartiré el temario de una materia escolar, devuelveme en texto los temas y subtemas dentro del mismo." +
-                                "No incluyas nada más, solo devuelveme los temas y subtemas." +
-                                "Revisa bien el documento y asegurate de no dejar ningun tema o subtema fuera de tu respuesta, algunos pueden estar cortados al final de la pagina o al inicio" +
-                                "En caso de que el contenido del archivo que te mande no incluya temas o subtemas devuelveme un '1' y nada más")
-                    }
+            do {
+                val inputStream = contentResolver.openInputStream(uri)
+                if(inputStream != null){
 
-                    lifecycleScope.launch {
-                        try{
-                            respuesta = model.generateContent(prompt).text
-                        }catch (e: Exception){
-                            Log.e("Gemini", "Error al generar contenido", e)
+
+                    inputStream.use { stream ->
+                        val prompt = content {
+                            inlineData(
+                                bytes = stream.readBytes(),
+                                mimeType = "application/pdf"
+                            )
+                            text("A continuación, te enviaré el temario de una materia escolar. Tu tarea será extraer y devolver en formato de texto únicamente el tema número $contador junto con todos sus subtemas correspondientes." +
+                                    "Asegúrate de no omitir ningún tema o subtema, incluso si estos se encuentran cortados al inicio o final de página del documento." +
+                                    "Si el contenido del archivo no incluye temas o subtemas, responde exclusivamente con '1'." +
+                                    "Si el tema número $contador no existe, responde exclusivamente con 'alto'." +
+                                    "No incluyas ninguna otra información en tu respuesta.")
                         }
 
+                        runBlocking {
+                            try {
+                                respuesta = model.generateContent(prompt).text
+                            } catch (e: Exception) {
+                                Log.e("Gemini", "Error al generar contenido", e)
+                                respuesta = "error"
+                            }
+                        }
 
+                        if(respuesta.toString().trim() != "alto"){
+                            listaTemas.add(respuesta.toString())
+                        }
+
+                       /*Log.d("prueba", respuesta.toString())
+                        if(respuesta.toString().contains("alto")){
+                            Log.d("prueba","CAAA")
+                        }*/
+                        contador++
                     }
+
                 }
-            }
+            }while(respuesta.toString().trim() != "alto") // fin del for
+            Toast.makeText(requireContext(), "Los temarios se han leido correctamente", Toast.LENGTH_SHORT).show()
         }else{
             Toast.makeText(requireContext(), "Selecciona un temario", Toast.LENGTH_SHORT).show()
         }

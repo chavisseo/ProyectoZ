@@ -55,5 +55,9 @@ dependencies {
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation("com.google.firebase:firebase-ai")
     implementation(platform("com.google.firebase:firebase-bom:33.14.0"))
+    implementation ("io.noties.markwon:core:4.6.2")
+    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation("com.squareup.okio:okio:2.10.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 
 }

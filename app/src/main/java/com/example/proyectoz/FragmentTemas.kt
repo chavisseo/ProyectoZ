@@ -2,6 +2,7 @@ package com.example.proyectoz
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -17,85 +18,70 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.firebase.firestore.FirebaseFirestore
 
-class FragmentMaterias : Fragment() {
+class FragmentTemas : Fragment(){
 
-    private var nombreCarrera: String? = null
     private lateinit var db: FirebaseFirestore
     private val listaNombres = mutableListOf<String>()
-    private val listaClaves= mutableListOf<String>()
+    private val listaNumeros = mutableListOf<String>()
     private lateinit var container: LinearLayout
     private var claveMateria: String? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         db = FirebaseFirestore.getInstance()
-        val view = inflater.inflate(R.layout.fragment_materias, container, false)
-        this.container = view.findViewById(R.id.containerMaterias)
-        return view;
+        val view = inflater.inflate(R.layout.fragment_temas, container, false)
+        this.container = view.findViewById(R.id.containerTemas)
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val flAgregar = view.findViewById<FrameLayout>(R.id.flAgregar)
-        val flPerfil = view.findViewById<FrameLayout>(R.id.flPerfil)
-        nombreCarrera = arguments?.getString("carrera")
-        (activity as? Menu)?.actualizarTextoInferior("Te encuentras dentro de $nombreCarrera")
+        claveMateria = arguments?.getString("clave")
 
-        //obtenerClases()
-        obtenerClases()
+        obtenerActividades()
+       // Toast.makeText(requireContext(), "Hola", Toast.LENGTH_SHORT).show()
 
-        flAgregar.setOnClickListener {
-            val bundle = Bundle().apply {
-                putString("carrera", nombreCarrera)
-            }
-
-            val fragmentAgregarMateria = FragmentAgregarMateria()
-            fragmentAgregarMateria.arguments = bundle
-
-            // Ripple + navegación
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, fragmentAgregarMateria)
-                .addToBackStack(null)
-                .commit()
-        }
-
-        flPerfil.setOnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, FragmentAgregarMateria())
-                .addToBackStack(null)
-                .commit()
-        }
     }
 
-    fun obtenerClases(){
-        db.collection("Materias")
+    fun obtenerActividades(){
+        
+        db.collection("Temas")
             .get()
             .addOnSuccessListener { result ->
                 for (document in result){
-                    val nombre = document.getString("nombre")
-                    val clase = document.getString("clase")
-                    val clave = document.getString("clave")
-                    if(clase!=null && clase == nombreCarrera
-                        && nombre!= null && !listaNombres.contains(nombre)){
-                        listaNombres.add(nombre)
-                        if(clave != null){
-                            listaClaves.add(clave)
+                    var contador = 1;
+                    val claveD = document.getString("clave")
+                    do{
+
+                        var texto = document.getString("$contador") ?: "alto"
+                        Log.d("prueba", "$claveD es igual a $claveMateria")
+                        if(texto != "alto" && !listaNombres.contains(texto) && claveD == claveMateria){
+                            listaNombres.add(texto)
+                            listaNumeros.add("Tema $contador")
+                            Log.d("prueba", "$contador: $texto")
                         }
+                        contador++
+                    }while(texto != "alto")
 
-                    }
-
-
+                   /* Log.d("prueba", "holaaa")
+                    tema1 = document.getString("1") ?: "nulo"
+                    Log.d("prueba", "Este $tema1")*/
                 }
 
-                //agregarTarjetasDinamicas
-                agregarTarjetasDinamicas(listaNombres, requireContext(), container, listaClaves)
+                agregarTarjetasDinamicas(listaNumeros, requireContext(), container, listaNombres)
+
             }
+
+
+
+
     }
 
-    fun agregarTarjetasDinamicas(nombres: List<String>, contexto: Context, container: LinearLayout, claves: List<String>){
+    fun agregarTarjetasDinamicas(nombres: List<String>, contexto: Context, container: LinearLayout, temas: List<String>){
         val imagen = R.drawable.clasesbtn
 
         for(i in nombres.indices step 2){
@@ -111,11 +97,11 @@ class FragmentMaterias : Fragment() {
                 gravity = Gravity.CENTER
             }
 
-            fila.addView(crearCard(contexto, nombres[i], imagen, claves[i]))
+            fila.addView(crearCard(contexto, nombres[i], imagen, temas[i]))
 
             //Segunda tarjeta (si existe)
             if(i + 1 < nombres.size){
-                fila.addView(crearCard(contexto, nombres[i + 1], imagen, claves[i+1]))
+                fila.addView(crearCard(contexto, nombres[i + 1], imagen, temas[i + 1]))
             }else{
                 val espacio = Space(contexto).apply {
                     layoutParams = LinearLayout.LayoutParams(
@@ -133,7 +119,7 @@ class FragmentMaterias : Fragment() {
 
     }
 
-    fun crearCard(context: android.content.Context, texto: String, imagenResId: Int, clave: String): CardView {
+    fun crearCard(context: android.content.Context, texto: String, imagenResId: Int, temas: String): CardView {
         val heightInPx = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
             150f,
@@ -198,13 +184,14 @@ class FragmentMaterias : Fragment() {
         //On click que mandará a la siguiente vista
         frameLayout.setOnClickListener {
             val bundle = Bundle().apply {
-                putString("clave", clave)
+                putString("clave", claveMateria)
+                putString("temario", temas)
             }
-            val fragmentTemas = FragmentTemas()
-            fragmentTemas.arguments = bundle
+            val fragmentActividades = FragmentActividades()
+            fragmentActividades.arguments = bundle
 
             requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, fragmentTemas)
+                .replace(R.id.fragmentContainer, fragmentActividades)
                 .addToBackStack(null)
                 .commit()
         }
@@ -219,4 +206,6 @@ class FragmentMaterias : Fragment() {
     fun Int.dpToPx(context: android.content.Context): Int {
         return (this * context.resources.displayMetrics.density).toInt()
     }
+
+
 }
