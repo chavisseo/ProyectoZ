@@ -6,6 +6,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.FragmentManager
@@ -76,6 +77,45 @@ class Menu : AppCompatActivity() {
         }
 
     }
+
+    fun updateMenuHighlight(current: String) {
+        val escuelas = findViewById<TextView>(R.id.tvEscuelas)
+        val clases = findViewById<TextView>(R.id.tvClases)
+        val materias = findViewById<TextView>(R.id.tvMaterias)
+        val actividades = findViewById<TextView>(R.id.tvActividades)
+
+        val defaultBackground = ContextCompat.getDrawable(this, android.R.color.transparent)
+        val selectedBackground = ContextCompat.getDrawable(this, R.drawable.rounded_button)
+        val defaultTextColor = ContextCompat.getColor(this, R.color.black) // Pon tu color normal
+        val selectedTextColor = ContextCompat.getColor(this, android.R.color.white)     // Color para seleccionado
+
+        val items = listOf(escuelas, clases, materias, actividades)
+
+        items.forEach {
+            it.background = defaultBackground
+            it.setTextColor(defaultTextColor)
+        }
+
+        when (current) {
+            "Escuelas" -> {
+                escuelas.background = selectedBackground
+                escuelas.setTextColor(selectedTextColor)
+            }
+            "Clases" -> {
+                clases.background = selectedBackground
+                clases.setTextColor(selectedTextColor)
+            }
+            "Materias" -> {
+                materias.background = selectedBackground
+                materias.setTextColor(selectedTextColor)
+            }
+            "Actividades" -> {
+                actividades.background = selectedBackground
+                actividades.setTextColor(selectedTextColor)
+            }
+        }
+    }
+
 
 
 }

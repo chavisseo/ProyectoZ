@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
 import com.google.api.Context
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class FragmentEscuelas : Fragment() {
@@ -25,6 +26,7 @@ class FragmentEscuelas : Fragment() {
     private lateinit var db : FirebaseFirestore
     private lateinit var container: LinearLayout
     private val listaNombres = mutableListOf<String>()
+    val userId = FirebaseAuth.getInstance().currentUser?.uid
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -55,10 +57,12 @@ class FragmentEscuelas : Fragment() {
 
 
         (activity as? Menu)?.actualizarTextoInferior("¿Qué actividad harás hoy?")
+        (activity as? Menu)?.updateMenuHighlight("Escuelas")
     }
 
     fun obtenerEscuelas(){
         db.collection("Escuelas")
+            .whereEqualTo("userId", userId)
             .get()
             .addOnSuccessListener { result ->
                 for (document in result){

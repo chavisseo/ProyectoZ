@@ -7,15 +7,18 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 
 class FragmentAgregarEscuelas : Fragment() {
 
     private lateinit var db: FirebaseFirestore
+    val userId = FirebaseAuth.getInstance().currentUser?.uid
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,6 +37,7 @@ class FragmentAgregarEscuelas : Fragment() {
         val paisInput = view.findViewById<EditText>(R.id.inputPais)
         val estadoInput = view.findViewById<EditText>(R.id.inputEstado)
         val municipioInput = view.findViewById<EditText>(R.id.inputMunicipio)
+        val progressBar = view.findViewById<ProgressBar>(R.id.progressBar)
 
         val spinnerNivel = view.findViewById<Spinner>(R.id.spinnerNivel)
         ArrayAdapter.createFromResource(
@@ -66,6 +70,8 @@ class FragmentAgregarEscuelas : Fragment() {
 
             if(nombre.isNotEmpty() && pais.isNotEmpty() && estado.isNotEmpty()
                 && municipio.isNotEmpty() && nivel.isNotEmpty() && tipo.isNotEmpty()){
+                btnAgregarEscuelas.isEnabled = false
+                progressBar.visibility = View.VISIBLE
                 //Crear el objeto
                 val escuela = hashMapOf(
                     "nombre" to nombre,
@@ -73,17 +79,22 @@ class FragmentAgregarEscuelas : Fragment() {
                     "estado" to estado,
                     "municipio" to municipio,
                     "nivel" to nivel,
-                    "tipo" to tipo
+                    "tipo" to tipo,
+                    "userId" to userId
                 )
 
                 db.collection("Escuelas")
                     .add(escuela).addOnSuccessListener {
+                        progressBar.visibility = View.GONE
+                        btnAgregarEscuelas.isEnabled = true
                         // Mostrar el diálogo usando el FragmentManager de la Activity
                         val dialog = DialogMateriaAgregada()
                         dialog.isCancelable = true
                         dialog.show(requireActivity().supportFragmentManager, "success_dialog")
                     }
                     .addOnFailureListener{
+                        progressBar.visibility = View.GONE
+                        btnAgregarEscuelas.isEnabled = true
                         Toast.makeText(requireContext(), "Error al guardar: ${it.message}", Toast.LENGTH_SHORT).show()
                     }
             }else{

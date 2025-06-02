@@ -20,6 +20,8 @@ class DialogMateriaAgregada : DialogFragment() {
             .setView(view)
             .create()
 
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
         // Botón Aceptar: cierra el diálogo
         view.findViewById<Button>(R.id.btnAceptar)
             .setOnClickListener { dismiss() }

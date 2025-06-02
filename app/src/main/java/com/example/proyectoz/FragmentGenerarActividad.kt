@@ -65,11 +65,6 @@ class FragmentGenerarActividad : Fragment(){
     private var claveMateria: String? = null
     private var temario: String? = null
     private var promptAux: String? = null
-    private var inputActividad: TextView? = null
-    val apikey = "api_test_r7H3y5NaEqm6jnLTes"
-    val apiPassword = "HRLxYt7aN3bce39xAXzaAqGqqqfFESrpzh3LxJG2hX"
-    val templateId = "tpl_y9myJkJLtcphG5pNFr"
-    val client = OkHttpClient()
     private var objetivo: String? = null
     private var instrucciones: String? = null
     private var recursos: String? = null
@@ -168,11 +163,6 @@ class FragmentGenerarActividad : Fragment(){
                 Log.d("Gemini", "Respuesta: $respuesta")
                 val markwon = Markwon.create(requireContext())
                 markwon.setMarkdown(textView, respuesta)
-//                val secciones = extraerSecciones(respuesta)
-//                objetivo = secciones["objetivo"]
-//                instrucciones = secciones["instrucciones"]
-//                recursos = secciones["recursos"]
-//                rubrica = secciones["rubrica"]
                 Log.d("prueba", "resouesta: $respuesta")
                 extraerSecciones2(respuesta)
                 Log.d("prueba", "Objetivo: $objetivo")

@@ -2,8 +2,11 @@ package com.example.proyectoz
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -18,7 +21,8 @@ class SignUp : AppCompatActivity() {
     private lateinit var nombreUsuarioInput : EditText
     private lateinit var correoInput : EditText
     private lateinit var contrasenaInput : EditText
-
+    private lateinit var progressBar : ProgressBar
+    private lateinit var btnRegistrar : Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -34,13 +38,11 @@ class SignUp : AppCompatActivity() {
         nombreUsuarioInput = findViewById<EditText>(R.id.inputUsuario)
         correoInput = findViewById<EditText>(R.id.inputCorreo)
         contrasenaInput = findViewById<EditText>(R.id.inputContrasena)
-        val btnRegistrar = findViewById<Button>(R.id.btnRegistrar)
+        progressBar = findViewById<ProgressBar>(R.id.progressBar)
+        btnRegistrar = findViewById<Button>(R.id.btnRegistrar)
+        val tvIniciarSesion = findViewById<TextView>(R.id.tvIniciaSesion)
 
-        //Ir a vista Login
-        val btnLogin = findViewById<Button>(R.id.btn_login)
-        btnLogin.setOnClickListener(){
-            irALogin()
-        }
+
 
         //Registrar usuario
         btnRegistrar.setOnClickListener(){
@@ -49,18 +51,26 @@ class SignUp : AppCompatActivity() {
             val contrasena = contrasenaInput.text.toString().trim()
 
             if(nombreUsuario.isNotEmpty() && correo.isNotEmpty() && contrasena.isNotEmpty()){
+                btnRegistrar.isEnabled = false
+                progressBar.visibility = View.VISIBLE
                 registrarUsuario(nombreUsuario, correo, contrasena)
             }else{
                 Toast.makeText(this, "Completa todos los campos correctamente", Toast.LENGTH_SHORT).show()
             }
         }
 
+        tvIniciarSesion.setOnClickListener {
+            irALogin()
+        }
 
     }
 
     private fun registrarUsuario(nombre: String, correo: String, contrasena: String){
         auth.createUserWithEmailAndPassword(correo, contrasena)
             .addOnCompleteListener(this) { task ->
+                progressBar.visibility = View.GONE
+                btnRegistrar.isEnabled = true
+
                 if(task.isSuccessful){
                     val usuario = auth.currentUser
                     val perfil = UserProfileChangeRequest.Builder()
@@ -71,7 +81,8 @@ class SignUp : AppCompatActivity() {
                         nombreUsuarioInput.text.clear()
                         correoInput.text.clear()
                         contrasenaInput.text.clear()
-                        irALogin()
+                        startActivity(Intent(this, Menu::class.java))
+                        finish()
 
                     }
                 }else{
@@ -83,5 +94,6 @@ class SignUp : AppCompatActivity() {
     private fun irALogin(){
         val intent = Intent(this, SignIn::class.java)
         startActivity(intent)
+        finish()
     }
 }

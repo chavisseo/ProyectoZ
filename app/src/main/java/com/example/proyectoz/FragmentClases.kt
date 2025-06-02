@@ -14,6 +14,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class FragmentClases : Fragment() {
@@ -22,6 +23,7 @@ class FragmentClases : Fragment() {
     private lateinit var db: FirebaseFirestore
     private val listaNombres = mutableListOf<String>()
     private lateinit var container: LinearLayout
+    val userId = FirebaseAuth.getInstance().currentUser?.uid
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,6 +41,7 @@ class FragmentClases : Fragment() {
         val flAgregar = view.findViewById<FrameLayout>(R.id.flAgregar)
         nombreEscuela = arguments?.getString("nombre")
         (activity as? Menu)?.actualizarTextoInferior("Te encuentras dentro de $nombreEscuela")
+        (activity as? Menu)?.updateMenuHighlight("Clases")
 
         obtenerClases()
 
@@ -62,6 +65,7 @@ class FragmentClases : Fragment() {
 
     fun obtenerClases(){
         db.collection("Clases")
+            .whereEqualTo("userId", userId)
             .get()
             .addOnSuccessListener { result ->
                 for (document in result){

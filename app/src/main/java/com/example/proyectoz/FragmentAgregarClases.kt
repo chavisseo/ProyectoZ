@@ -7,14 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class FragmentAgregarClases : Fragment() {
 
     private lateinit var db: FirebaseFirestore
     private var nombreEscuela: String? = null
+    val userId = FirebaseAuth.getInstance().currentUser?.uid
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -32,11 +36,13 @@ class FragmentAgregarClases : Fragment() {
         val inputSemestre  = view.findViewById<EditText>(R.id.inputSemestre)
         val inputGrupo = view.findViewById<EditText>(R.id.inputGrupo)
         val inputEscuela = view.findViewById<EditText>(R.id.inputEscuela)
+        val progressBar = view.findViewById<ProgressBar>(R.id.progressBar)
         nombreEscuela = arguments?.getString("nombre")
 
         inputEscuela.text = Editable.Factory.getInstance().newEditable(nombreEscuela ?: "")
 
         val btnAgregarClase = view.findViewById<Button>(R.id.btnAgregarClase)
+
         btnAgregarClase.setOnClickListener {
 
             val carrera = inputCarrera.text.toString().trim()
@@ -46,25 +52,34 @@ class FragmentAgregarClases : Fragment() {
 
             if(carrera.isNotEmpty() && semestre.isNotEmpty() && grupo.isNotEmpty()
                 && escuela.isNotEmpty()){
+                btnAgregarClase.isEnabled = false
+                progressBar.visibility = View.VISIBLE
+
                 val clase = hashMapOf(
                     "carrera" to carrera,
                     "semestre" to semestre,
                     "grupo" to grupo,
-                    "escuela" to escuela
+                    "escuela" to escuela,
+                    "userId" to userId
                 )
 
                 db.collection("Clases")
                     .add(clase).addOnSuccessListener {
+                        progressBar.visibility = View.GONE
+                        btnAgregarClase.isEnabled = true
+
                         // Mostrar el diálogo usando el FragmentManager de la Activity
                         val dialog = DialogMateriaAgregada()
                         dialog.isCancelable = true
                         dialog.show(requireActivity().supportFragmentManager, "success_dialog")
                     }
                     .addOnFailureListener {
-                        Toast.makeText(requireContext(), "Error al guardar: ${it.message}", Toast.LENGTH_SHORT)
+                        progressBar.visibility = View.GONE
+                        btnAgregarClase.isEnabled = true
+                        Toast.makeText(requireContext(), "Error al guardar: ${it.message}", Toast.LENGTH_SHORT).show()
                     }
             }else{
-                Toast.makeText(requireContext(), "Ingresa todos los campos", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), "Ingresa todos los campos", Toast.LENGTH_SHORT).show()
             }
         }
 

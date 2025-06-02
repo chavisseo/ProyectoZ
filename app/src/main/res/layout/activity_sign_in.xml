@@ -73,11 +73,12 @@
             android:textColor="@color/black"/>
 
         <TextView
+            android:id="@+id/tvRegistrate"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:gravity="left"
-            android:text="@string/olvideContrasena"
+            android:text="@string/registrate"
             android:textColor="@color/black"
             android:textSize="14sp" /> <!-- Esto subraya el texto -->
 
@@ -90,4 +91,14 @@
             android:background="@drawable/rounded_button"
             android:text="Aceptar"/>
     </LinearLayout>
+
+    <!-- ProgressBar encima del contenido (inicialmente oculto) -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+
 </RelativeLayout>
