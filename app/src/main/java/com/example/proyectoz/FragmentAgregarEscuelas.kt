@@ -68,39 +68,61 @@ class FragmentAgregarEscuelas : Fragment() {
             val nivel = spinnerNivel.selectedItem.toString()
             val tipo = spinnerTipo.selectedItem.toString()
 
-            if(nombre.isNotEmpty() && pais.isNotEmpty() && estado.isNotEmpty()
-                && municipio.isNotEmpty() && nivel.isNotEmpty() && tipo.isNotEmpty()){
+            if (nombre.isNotEmpty() && pais.isNotEmpty() && estado.isNotEmpty()
+                && municipio.isNotEmpty() && nivel.isNotEmpty() && tipo.isNotEmpty()
+            ) {
                 btnAgregarEscuelas.isEnabled = false
                 progressBar.visibility = View.VISIBLE
-                //Crear el objeto
-                val escuela = hashMapOf(
-                    "nombre" to nombre,
-                    "pais" to pais,
-                    "estado" to estado,
-                    "municipio" to municipio,
-                    "nivel" to nivel,
-                    "tipo" to tipo,
-                    "userId" to userId
-                )
 
+                // Validar si ya existe una escuela con el mismo nombre
                 db.collection("Escuelas")
-                    .add(escuela).addOnSuccessListener {
+                    .whereEqualTo("nombre", nombre)
+                    .whereEqualTo("userId", userId)
+                    .get()
+                    .addOnSuccessListener { documents ->
+                        if (!documents.isEmpty) {
+                            // Ya existe una escuela con ese nombre
+                            progressBar.visibility = View.GONE
+                            btnAgregarEscuelas.isEnabled = true
+                            Toast.makeText(requireContext(), "Ya existe una escuela con ese nombre", Toast.LENGTH_SHORT).show()
+                        } else {
+                            // No existe, se puede agregar
+                            val escuela = hashMapOf(
+                                "nombre" to nombre,
+                                "pais" to pais,
+                                "estado" to estado,
+                                "municipio" to municipio,
+                                "nivel" to nivel,
+                                "tipo" to tipo,
+                                "userId" to userId
+                            )
+
+                            db.collection("Escuelas")
+                                .add(escuela)
+                                .addOnSuccessListener {
+                                    progressBar.visibility = View.GONE
+                                    btnAgregarEscuelas.isEnabled = true
+                                    val dialog = DialogMateriaAgregada()
+                                    dialog.isCancelable = true
+                                    dialog.show(requireActivity().supportFragmentManager, "success_dialog")
+                                }
+                                .addOnFailureListener {
+                                    progressBar.visibility = View.GONE
+                                    btnAgregarEscuelas.isEnabled = true
+                                    Toast.makeText(requireContext(), "Error al guardar: ${it.message}", Toast.LENGTH_SHORT).show()
+                                }
+                        }
+                    }
+                    .addOnFailureListener {
                         progressBar.visibility = View.GONE
                         btnAgregarEscuelas.isEnabled = true
-                        // Mostrar el diálogo usando el FragmentManager de la Activity
-                        val dialog = DialogMateriaAgregada()
-                        dialog.isCancelable = true
-                        dialog.show(requireActivity().supportFragmentManager, "success_dialog")
+                        Toast.makeText(requireContext(), "Error al validar: ${it.message}", Toast.LENGTH_SHORT).show()
                     }
-                    .addOnFailureListener{
-                        progressBar.visibility = View.GONE
-                        btnAgregarEscuelas.isEnabled = true
-                        Toast.makeText(requireContext(), "Error al guardar: ${it.message}", Toast.LENGTH_SHORT).show()
-                    }
-            }else{
+
+            } else {
                 Toast.makeText(requireContext(), "Ingresa todos los campos", Toast.LENGTH_SHORT).show()
             }
-
         }
+
     }
 }

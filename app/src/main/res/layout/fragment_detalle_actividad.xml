@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/fragment_generar_actividad"
+    android:id="@+id/fragment_detalle_actividad"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
@@ -59,16 +59,16 @@
                         android:id="@+id/inputActividad"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:gravity="start|top"
-                    android:textSize="14sp"
+                        android:padding="8dp"
+                        android:gravity="start|top"
+                        android:textSize="14sp"
 
-                    android:background="@drawable/rounded_edittxt"
-                    android:textColor="@color/black"
-                    android:inputType="textMultiLine"
+                        android:background="@drawable/rounded_edittxt"
+                        android:textColor="@color/black"
+                        android:inputType="textMultiLine"
 
 
-                    android:scrollbars="vertical" />
+                        android:scrollbars="vertical" />
 
                     <!-- Separación -->
                     <View

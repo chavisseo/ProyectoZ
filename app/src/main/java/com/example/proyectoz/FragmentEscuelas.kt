@@ -174,7 +174,7 @@ class FragmentEscuelas : Fragment() {
                 topMargin = 8.dpToPx(context)
             }
             text = texto
-            textSize = 16f
+            textSize = 14f
         }
 
         frameLayout.setOnClickListener {

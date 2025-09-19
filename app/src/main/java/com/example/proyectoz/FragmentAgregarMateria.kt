@@ -24,6 +24,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.withTimeoutOrNull
+import kotlin.coroutines.cancellation.CancellationException
 
 class FragmentAgregarMateria : Fragment() {
 
@@ -34,8 +37,10 @@ class FragmentAgregarMateria : Fragment() {
     private val PICK_PDF_FILE = 2
     private var selectedPdfUri: Uri? = null
     private var nombreClase: String? = null
+    private var respuestaGlobal: String? = null
     private var archivoSeleccionado: Boolean? = false
     private val listaTemas = mutableListOf<String>()
+    private val listaClaves = mutableListOf<String>()
     val userId = FirebaseAuth.getInstance().currentUser?.uid
 
     override fun onCreateView(
@@ -63,6 +68,8 @@ class FragmentAgregarMateria : Fragment() {
         val progressBar = view.findViewById<ProgressBar>(R.id.progressBar)
         nombreClase = arguments?.getString("carrera")
 
+        obtenerClaves()
+
         btnSeleccionarTemario.setOnClickListener {
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
                 addCategory(Intent.CATEGORY_OPENABLE)
@@ -88,7 +95,17 @@ class FragmentAgregarMateria : Fragment() {
                 btnAgregarMateria.isEnabled = false
                 progressBar.visibility = View.VISIBLE
 
+                if(listaClaves.contains(clave)){
+                    Toast.makeText(requireContext(), "Ya hay una materia con esta clave", Toast.LENGTH_SHORT).show()
+                    btnSeleccionarTemario.isEnabled = true
+                    btnAgregarMateria.isEnabled = true
+                    progressBar.visibility = View.GONE
+                    return@setOnClickListener
+                }
+
+
                 generarTemario(uri!!) {
+
                     if (listaTemas.isEmpty()) {
                         Toast.makeText(requireContext(), "El archivo ingresado no es un temario", Toast.LENGTH_SHORT).show()
                         btnSeleccionarTemario.isEnabled = true
@@ -96,6 +113,17 @@ class FragmentAgregarMateria : Fragment() {
                         progressBar.visibility = View.GONE
                         return@generarTemario
                     }
+
+
+                    if(respuestaGlobal == "error" || respuestaGlobal == "ninguno"){
+                        Toast.makeText(requireContext(), "Tiempo de espera agotado", Toast.LENGTH_SHORT).show()
+                        btnSeleccionarTemario.isEnabled = true
+                        btnAgregarMateria.isEnabled = true
+                        progressBar.visibility = View.GONE
+                        return@generarTemario
+                    }
+
+
 
                     val hash = listaTemas.mapIndexed { index, elemento ->
                         (index + 1).toString() to elemento
@@ -142,9 +170,11 @@ class FragmentAgregarMateria : Fragment() {
                 Toast.makeText(requireContext(), "Ingresa todos los campos", Toast.LENGTH_SHORT).show()
             }
         }
+
     }
 
     fun generarTemario(uri: Uri, onComplete: () -> Unit) {
+        respuestaGlobal = ""
         if (uri != null) {
             val contentResolver = requireContext().contentResolver
             var contador = 1
@@ -173,13 +203,14 @@ class FragmentAgregarMateria : Fragment() {
 
 🔍 Muy importante:  
 - Los temas y subtemas suelen tener el siguiente formato:  
-  - **Tema:** Un número seguido de punto y un título. Ejemplo: `3. Comunicación del protocolo de investigación`.  
-  - **Subtema:** Número del tema seguido de punto, otro número y punto, y un título. Ejemplo: `3.1. Estructura formal del documento acorde a lineamientos establecidos`.  
+  - **Tema:** Un número seguido de punto y un título. Ejemplo: 3. Comunicación del protocolo de investigación.  
+  - **Subtema:** Número del tema seguido de punto, otro número y punto, y un título. Ejemplo: 3.1. Estructura formal del documento acorde a lineamientos establecidos.  
 - Debes **incluir solo** los temas y subtemas que forman parte del temario académico.  
 
 🚫 **Excluye expresamente cualquier sección que no sea tema o subtema del temario.** No debes incluir lo siguiente, aunque esté numerado o parezca un tema:  
-- Competencias a desarrollar (por ejemplo: `4. Competencia(s) a desarrollar`)  
+- Competencias a desarrollar (por ejemplo: 4. Competencia(s) a desarrollar)  
 - Competencias previas, competencias específicas, actividades, prácticas, proyectos, recursos, ejercicios o cualquier sección similar que no sea parte del listado de temas.  
+- Archivos de actividades que incluyan: Objetivos, Instrucciones, Recursos necesarios, Rúbrica
 
 ✅ Tu tarea consiste exclusivamente en identificar y devolver el tema solicitado y todos sus subtemas correspondientes, sin omitir ningún detalle.  
 ✅ Si encuentras secciones numeradas como “4. Competencia(s) a desarrollar”, debes **excluirlas completamente**. Solo se deben incluir temas y subtemas del contenido académico formal del temario.  
@@ -188,18 +219,43 @@ class FragmentAgregarMateria : Fragment() {
 Tu análisis debe abarcar minuciosamente todas las páginas del documento para no omitir ningún contenido válido.
 
                                 """)
+
+
                             }
 
                             try {
-                                localRespuesta = model.generateContent(prompt).text ?: "error"
+                                val start = System.currentTimeMillis()
+
+                                localRespuesta = withTimeoutOrNull(10_000) {
+                                    model.generateContent(prompt).text
+                                } ?: "ninguno"
+
+                                val end = System.currentTimeMillis()
                                 Log.d("Gemini", "$contador: $localRespuesta")
-                            } catch (e: Exception) {
+                                Log.d("Gemini", "MS: ${end - start} ms")
+                            } catch (e: CancellationException) {
+                                Log.e("Gemini", "Tiempo de espera agotado", e)
+                                localRespuesta = "timeout" // marcamos como timeout explícito
+                            }
+                            catch (e: Exception) {
                                 Log.e("Gemini", "Error al generar contenido", e)
                                 localRespuesta = "error"
                             }
 
                             if (localRespuesta.trim() != "alto") {
                                 listaTemas.add(localRespuesta)
+                            }
+
+                            if(localRespuesta.trim() == "ninguno"){
+                                respuestaGlobal = localRespuesta.trim()
+
+                                localRespuesta = "alto"
+                            }
+
+                            if(localRespuesta.trim() == "error"){
+                                respuestaGlobal = localRespuesta.trim()
+
+                                localRespuesta = "alto"
                             }
 
                             contador++
@@ -210,7 +266,7 @@ Tu análisis debe abarcar minuciosamente todas las páginas del documento para n
                 } while (localRespuesta.trim() != "alto")
 
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(requireContext(), "Los temarios se han leído correctamente", Toast.LENGTH_SHORT).show()
+                //    Toast.makeText(requireContext(), "Los temarios se han leído correctamente", Toast.LENGTH_SHORT).show()
                     onComplete()
                 }
             }
@@ -229,5 +285,19 @@ Tu análisis debe abarcar minuciosamente todas las páginas del documento para n
                 archivoSeleccionado = true
             }
         }
+    }
+
+    fun obtenerClaves(){
+        db.collection("Materias")
+            .whereEqualTo("userId", userId)
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result){
+                    val clave = document.getString("clave")
+                    if(clave != null && !listaClaves.contains(clave)){
+                        listaClaves.add(clave)
+                    }
+                }
+            }
     }
 }

@@ -45,12 +45,12 @@ class FragmentTemas : Fragment(){
         claveMateria = arguments?.getString("clave")
         (activity as? Menu)?.updateMenuHighlight("Actividades")
 
-        obtenerActividades()
+        obtenerTemas()
        // Toast.makeText(requireContext(), "Hola", Toast.LENGTH_SHORT).show()
 
     }
 
-    fun obtenerActividades(){
+    fun obtenerTemas(){
         
         db.collection("Temas")
             .whereEqualTo("userId", userId)

@@ -44,44 +44,61 @@ class FragmentAgregarClases : Fragment() {
         val btnAgregarClase = view.findViewById<Button>(R.id.btnAgregarClase)
 
         btnAgregarClase.setOnClickListener {
-
             val carrera = inputCarrera.text.toString().trim()
             val semestre = inputSemestre.text.toString().trim()
             val grupo = inputGrupo.text.toString().trim()
             val escuela = inputEscuela.text.toString().trim()
 
-            if(carrera.isNotEmpty() && semestre.isNotEmpty() && grupo.isNotEmpty()
-                && escuela.isNotEmpty()){
+            if (carrera.isNotEmpty() && semestre.isNotEmpty() && grupo.isNotEmpty() && escuela.isNotEmpty()) {
                 btnAgregarClase.isEnabled = false
                 progressBar.visibility = View.VISIBLE
 
-                val clase = hashMapOf(
-                    "carrera" to carrera,
-                    "semestre" to semestre,
-                    "grupo" to grupo,
-                    "escuela" to escuela,
-                    "userId" to userId
-                )
-
+                // Verificar si ya existe una clase con la misma carrera en la misma escuela
                 db.collection("Clases")
-                    .add(clase).addOnSuccessListener {
-                        progressBar.visibility = View.GONE
-                        btnAgregarClase.isEnabled = true
+                    .whereEqualTo("carrera", carrera)
+                    .whereEqualTo("escuela", escuela)
+                    .get()
+                    .addOnSuccessListener { documents ->
+                        if (!documents.isEmpty) {
+                            progressBar.visibility = View.GONE
+                            btnAgregarClase.isEnabled = true
+                            Toast.makeText(requireContext(), "Ya existe esa carrera en la escuela indicada", Toast.LENGTH_SHORT).show()
+                        } else {
+                            val clase = hashMapOf(
+                                "carrera" to carrera,
+                                "semestre" to semestre,
+                                "grupo" to grupo,
+                                "escuela" to escuela,
+                                "userId" to userId
+                            )
 
-                        // Mostrar el diálogo usando el FragmentManager de la Activity
-                        val dialog = DialogMateriaAgregada()
-                        dialog.isCancelable = true
-                        dialog.show(requireActivity().supportFragmentManager, "success_dialog")
+                            db.collection("Clases")
+                                .add(clase)
+                                .addOnSuccessListener {
+                                    progressBar.visibility = View.GONE
+                                    btnAgregarClase.isEnabled = true
+
+                                    val dialog = DialogMateriaAgregada()
+                                    dialog.isCancelable = true
+                                    dialog.show(requireActivity().supportFragmentManager, "success_dialog")
+                                }
+                                .addOnFailureListener {
+                                    progressBar.visibility = View.GONE
+                                    btnAgregarClase.isEnabled = true
+                                    Toast.makeText(requireContext(), "Error al guardar: ${it.message}", Toast.LENGTH_SHORT).show()
+                                }
+                        }
                     }
                     .addOnFailureListener {
                         progressBar.visibility = View.GONE
                         btnAgregarClase.isEnabled = true
-                        Toast.makeText(requireContext(), "Error al guardar: ${it.message}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Error al validar: ${it.message}", Toast.LENGTH_SHORT).show()
                     }
-            }else{
+            } else {
                 Toast.makeText(requireContext(), "Ingresa todos los campos", Toast.LENGTH_SHORT).show()
             }
         }
+
 
 
     }

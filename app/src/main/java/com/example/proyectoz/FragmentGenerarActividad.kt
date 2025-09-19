@@ -24,6 +24,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -34,6 +35,8 @@ import com.google.firebase.Firebase
 import com.google.firebase.ai.ai
 import com.google.firebase.ai.type.GenerativeBackend
 import com.google.firebase.ai.type.content
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import io.noties.markwon.Markwon
 import kotlinx.coroutines.CoroutineScope
@@ -60,6 +63,8 @@ import java.util.Date
 class FragmentGenerarActividad : Fragment(){
 
     private lateinit var db: FirebaseFirestore
+    val userId = FirebaseAuth.getInstance().currentUser?.uid
+
     val model = Firebase.ai(backend = GenerativeBackend.googleAI())
         .generativeModel("gemini-2.0-flash")
     private var claveMateria: String? = null
@@ -69,6 +74,13 @@ class FragmentGenerarActividad : Fragment(){
     private var instrucciones: String? = null
     private var recursos: String? = null
     private var rubrica: String? = null
+    private var idDocumento: String? = null
+    private var respuestaDef: String? = null
+    private lateinit var btnGenerar: Button
+    private lateinit var btnPDF: Button
+    private lateinit var progressBar: ProgressBar
+    private lateinit var btnGuardar: Button
+
 
 
 
@@ -87,12 +99,21 @@ class FragmentGenerarActividad : Fragment(){
         db = FirebaseFirestore.getInstance()
         claveMateria = arguments?.getString("clave")
         temario = arguments?.getString("temario")
+        idDocumento = arguments?.getString("id")
+
         val inputActividad = view.findViewById<TextView>(R.id.inputActividad)
 
-        val btnGenerar = view.findViewById<Button>(R.id.btnGenerarActividad)
-        val btnPDF = view.findViewById<Button>(R.id.btnGenerarPDF)
+        btnGenerar = view.findViewById<Button>(R.id.btnGenerarActividad)
+        btnPDF = view.findViewById<Button>(R.id.btnGenerarPDF)
+        btnGuardar = view.findViewById<Button>(R.id.btnGuardarActividad)
+        progressBar = view.findViewById<ProgressBar>(R.id.progressBar)
+
 
         obtenerNombreMateria()
+
+        if(idDocumento != null){
+            obtenerTexto(inputActividad)
+        }
 
         btnGenerar.setOnClickListener {
             if(promptAux != null && temario != null){
@@ -103,12 +124,28 @@ class FragmentGenerarActividad : Fragment(){
         }
 
         btnPDF.setOnClickListener {
-            if(objetivo != null && instrucciones != null
-                && recursos != null && rubrica != null){
-                val objetivo = objetivo.toString()
-                val instrucciones = instrucciones.toString()
-                val recursos = recursos.toString()
-                val rubrica = rubrica.toString()
+
+            val objetivo: String
+            val instrucciones: String
+            val recursos: String
+            val rubrica: String
+
+            if(this.objetivo != null && this.instrucciones != null
+                && this.recursos != null && this.rubrica != null){
+                objetivo = this.objetivo.toString()
+                instrucciones = this.instrucciones.toString()
+                recursos = this.recursos.toString()
+                rubrica = this.rubrica.toString()
+
+                val pdfFile = createTwoPagePdf(objetivo, instrucciones, recursos, rubrica)
+                savePdfToDownloads(pdfFile)
+            }else if(idDocumento != null){
+                extraerSecciones2(inputActividad.text.toString())
+
+                objetivo = this.objetivo.toString()
+                instrucciones = this.instrucciones.toString()
+                recursos = this.recursos.toString()
+                rubrica = this.rubrica.toString()
 
                 val pdfFile = createTwoPagePdf(objetivo, instrucciones, recursos, rubrica)
                 savePdfToDownloads(pdfFile)
@@ -118,9 +155,100 @@ class FragmentGenerarActividad : Fragment(){
 
 
         }
+
+        btnGuardar.setOnClickListener {
+            progressBar.visibility = View.VISIBLE
+            btnGenerar.isEnabled = false
+            btnPDF.isEnabled = false
+            btnGuardar.isEnabled = false
+
+            val actividad = inputActividad.text.toString().trim()
+
+
+            if(actividad.isNotEmpty()){
+
+                if(idDocumento != null){
+                    db.collection("Actividades").whereEqualTo("id", idDocumento)
+                        .get()
+                        .addOnSuccessListener { documents ->
+                            if (!documents.isEmpty){
+                                val docId = documents.documents[0].id
+                                val actividadHash = hashMapOf<String, Any?>(
+                                    "actividad" to respuestaDef,
+                                    "temario" to temario,
+                                    "clave" to claveMateria,
+                                    "userId" to userId
+                                )
+
+                                db.collection("Actividades").document(docId).update(actividadHash)
+                                    .addOnSuccessListener {
+                                        progressBar.visibility = View.GONE
+                                        btnGenerar.isEnabled = true
+                                        btnPDF.isEnabled = true
+                                        btnGuardar.isEnabled = true
+
+                                        val dialog = DialogActividadGenerada()
+                                        dialog.isCancelable = true
+                                        dialog.show(requireActivity().supportFragmentManager, "success_dialog")
+                                    }.addOnFailureListener {
+                                        progressBar.visibility = View.GONE
+                                        btnGenerar.isEnabled = true
+                                        btnPDF.isEnabled = true
+                                        btnGuardar.isEnabled = true
+                                        Toast.makeText(requireContext(), "Ocurrio un error al guardar", Toast.LENGTH_SHORT).show()
+                                    }
+                            }
+                        }
+                }else{
+                    val nuevaActividadRef = db.collection("Actividades").document()
+                    val idGenerado = nuevaActividadRef.id
+
+                    val actividadHash = hashMapOf(
+                        "actividad" to respuestaDef,
+                        "timestamp" to FieldValue.serverTimestamp(),
+                        "temario" to temario,
+                        "id" to idGenerado,
+                        "clave" to claveMateria,
+                        "userId" to userId
+                    )
+
+                    nuevaActividadRef.set(actividadHash)
+                        .addOnSuccessListener {
+                            progressBar.visibility = View.GONE
+                            btnGenerar.isEnabled = true
+                            btnPDF.isEnabled = true
+                            btnGuardar.isEnabled = true
+                            val dialog = DialogActividadGenerada()
+                            dialog.isCancelable = true
+                            dialog.show(requireActivity().supportFragmentManager, "success_dialog")
+
+                        }
+                        .addOnFailureListener {
+                            progressBar.visibility = View.GONE
+                            btnGenerar.isEnabled = true
+                            btnPDF.isEnabled = true
+                            btnGuardar.isEnabled = true
+                            Toast.makeText(requireContext(), "Ocurrio un error al guardar", Toast.LENGTH_SHORT).show()
+                        }
+                }
+
+
+
+            }else{
+                Toast.makeText(requireContext(), "No ha generado una actividad", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
     }
 
     fun generarActividades(textView: TextView){
+
+        //Mostrar progressBar
+        progressBar.visibility = View.VISIBLE
+        btnGenerar.isEnabled = false
+        btnPDF.isEnabled = false
+        btnGuardar.isEnabled = false
 
         val prompt = content {
             text(
@@ -130,9 +258,9 @@ class FragmentGenerarActividad : Fragment(){
         La actividad será $promptAux. Tu respuesta debe contener exactamente las siguientes secciones, nombradas estrictamente así (incluyendo símbolos):
 
         1. Objetivo de la actividad&&&
-        &&& 2. Instrucciones%%%
-        %%% 3. Recursos necesarios;;;
-        ;;; 4. Rúbrica de Evaluación:::
+        &&&2. Instrucciones%%%
+        %%%3. Recursos necesarios;;;
+        ;;;4. Rúbrica de Evaluación:::
 
         Es muy importante que no modifiques los nombres de estas secciones, incluyendo los símbolos.
 
@@ -154,27 +282,48 @@ class FragmentGenerarActividad : Fragment(){
             )
         }
 
-
-
-
-        runBlocking {
+        // Usar CoroutineScope para lanzar sin bloquear
+        CoroutineScope(Dispatchers.Main).launch {
             try {
-                val respuesta = model.generateContent(prompt).text ?: "null"
+                val respuesta = withContext(Dispatchers.IO) {
+                    model.generateContent(prompt).text ?: "null"
+                }
+
                 Log.d("Gemini", "Respuesta: $respuesta")
                 val markwon = Markwon.create(requireContext())
                 markwon.setMarkdown(textView, respuesta)
-                Log.d("prueba", "resouesta: $respuesta")
+
                 extraerSecciones2(respuesta)
                 Log.d("prueba", "Objetivo: $objetivo")
                 Log.d("prueba", "Instrucciones: $instrucciones")
                 Log.d("prueba", "Recursos: $recursos")
                 Log.d("prueba", "Rubrica: $rubrica")
-              //  Toast.makeText(requireContext(), respuesta, Toast.LENGTH_SHORT).show()
+                respuestaDef = respuesta
+
             } catch (e: Exception) {
                 Log.e("Gemini", "Error al generar contenido", e)
                 Toast.makeText(requireContext(), "Error al generar respuesta", Toast.LENGTH_SHORT).show()
+            } finally {
+                // Ocultar ProgressBar al terminar
+                progressBar.visibility = View.GONE
+                btnGenerar.isEnabled = true
+                btnPDF.isEnabled = true
+                btnGuardar.isEnabled = true
             }
         }
+    }
+
+    fun obtenerTexto(textView: TextView){
+        db.collection("Actividades")
+            .whereEqualTo("id",idDocumento)
+            .get()
+            .addOnSuccessListener { documents ->
+                for(document in documents){
+                    val textoObtenido = document.getString("actividad") ?: "No hay actividad"
+                    val markwon = Markwon.create(requireContext())
+                    markwon.setMarkdown(textView, textoObtenido)
+                }
+            }
     }
 
     fun obtenerNombreEscuela(escuela: String){
