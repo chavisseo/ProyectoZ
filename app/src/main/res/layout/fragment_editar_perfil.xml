@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/colorPrimary">
+
+    <RelativeLayout
+        android:id="@+id/fragment_editar_perfil"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardEditarPerfil"
+            android:layout_width="370dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="8dp"
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:padding="20dp">
+
+                <!-- Título -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Editar Perfil"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:paddingBottom="12dp" />
+
+                <!-- Foto de perfil -->
+                <ImageView
+                    android:id="@+id/imgFotoPerfil"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginBottom="8dp"
+                    android:src="@drawable/ic_person"
+                    android:contentDescription="Foto de perfil"
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/circle_background" />
+
+                <Button
+                    android:id="@+id/btnCambiarFoto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cambiar foto"
+                    android:background="@drawable/rounded_button"
+                    android:textColor="@color/white"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Nombre Completo -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nombre completo"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:gravity="start" />
+
+                <EditText
+                    android:id="@+id/inputNombreCompleto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:padding="8dp"
+                    android:textSize="14sp"
+                    android:background="@drawable/rounded_edittxt"
+                    android:gravity="start"
+                    android:textColor="@color/black" />
+
+                <!-- Edad -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="Edad"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:gravity="start" />
+
+                <EditText
+                    android:id="@+id/inputEdad"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:inputType="number"
+                    android:padding="8dp"
+                    android:textSize="14sp"
+                    android:background="@drawable/rounded_edittxt"
+                    android:gravity="start"
+                    android:textColor="@color/black" />
+
+                <!-- Número de Teléfono -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="Número de teléfono"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:gravity="start" />
+
+                <EditText
+                    android:id="@+id/inputTelefono"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:inputType="phone"
+                    android:padding="8dp"
+                    android:textSize="14sp"
+                    android:background="@drawable/rounded_edittxt"
+                    android:gravity="start"
+                    android:textColor="@color/black" />
+
+                <!-- Botón Guardar Cambios -->
+                <Button
+                    android:id="@+id/btnGuardarPerfil"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="20dp"
+                    android:padding="5dp"
+                    android:text="Guardar cambios"
+                    android:textSize="16sp"
+                    android:background="@drawable/rounded_button"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- ProgressBar encima del contenido (inicialmente oculto) -->
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:elevation="10dp"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+</ScrollView>

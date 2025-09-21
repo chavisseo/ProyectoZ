@@ -23,6 +23,8 @@ class FragmentLogout : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val btnCerrarSesion = view.findViewById<Button>(R.id.btnCerrarSesion)
+        val btnEditarPerfil = view.findViewById<Button>(R.id.btnEditarPerfil)
+
 
         btnCerrarSesion.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
@@ -31,5 +33,18 @@ class FragmentLogout : Fragment() {
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
         }
+
+        btnEditarPerfil.setOnClickListener {
+
+            val fragmentPerfil = EditarPerfil()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, fragmentPerfil)
+                .addToBackStack(null)
+                .commit()
+
+
+        }
     }
 }
+
+

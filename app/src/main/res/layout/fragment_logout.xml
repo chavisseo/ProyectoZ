@@ -15,4 +15,14 @@
         android:padding="10dp"
         android:text="Cerrar sesion"/>
 
+    <Button
+        android:id="@+id/btnEditarPerfil"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_button"
+        android:textColor="@color/white"
+        android:padding="10dp"
+        android:text="Editar perfil"
+        android:layout_marginTop="16dp"/>
+
 </LinearLayout>

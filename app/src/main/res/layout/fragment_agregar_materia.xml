@@ -7,148 +7,196 @@
     android:background="@color/colorPrimary"
     android:gravity="center">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardAgregarMateria"
-        android:layout_width="370dp"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="8dp"
-        app:cardUseCompatPadding="true">
+    <!-- Scroll principal -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center_horizontal"
-            android:padding="20dp">
+            android:padding="16dp">
 
-            <!-- Título -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Agregar materia"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:paddingBottom="12dp" />
-
-            <!-- Clave -->
-            <TextView
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardAgregarMateria"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Clave"
-                android:textSize="14sp"
-                android:textColor="@color/black"
-                android:gravity="start" />
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp"
+                app:cardUseCompatPadding="true">
 
-            <EditText
-                android:id="@+id/inputClave"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:padding="8dp"
-                android:textSize="14sp"
-                android:background="@drawable/rounded_edittxt"
-                android:gravity="start"
-                android:textColor="@color/black" />
-
-            <!-- Nombre de la materia -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="Nombre de la materia"
-                android:textSize="14sp"
-                android:textColor="@color/black"
-                android:gravity="start" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <EditText
-                    android:id="@+id/inputNombreMateria"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:padding="8dp"
-                    android:textSize="14sp"
-                    android:background="@drawable/rounded_edittxt"
-                    android:gravity="start"
-                    android:textColor="@color/black" />
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    android:padding="20dp">
 
-                <!--ImageButton
-                    android:id="@+id/btnBuscarMateria"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="8dp"
-                    android:background="@null"
-                    android:src="@drawable/search"
-                    android:contentDescription="@string/desc_buscarMateria" /-->
-            </LinearLayout>
+                    <!-- Título -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Agregar materia"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:paddingBottom="12dp" />
 
-            <!-- Semestre -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="Semestre"
-                android:textSize="14sp"
-                android:textColor="@color/black"
-                android:gravity="start" />
+                    <!-- Materias registradas -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Materias registradas:"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:gravity="start" />
 
-            <EditText
-                android:id="@+id/inputSemestre"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:inputType="number"
-                android:padding="8dp"
-                android:textSize="14sp"
-                android:background="@drawable/rounded_edittxt"
-                android:gravity="start"
-                android:textColor="@color/black" />
+                    <Spinner
+                        android:id="@+id/spinnerMateriasRegistradas"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/spinner_background"
+                        android:padding="8dp"
+                        android:spinnerMode="dropdown" />
 
-            <!-- Temario -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="Temario"
-                android:textSize="14sp"
-                android:textColor="@color/black"
-                android:gravity="start" />
+                    <!-- Clave -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Clave"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:gravity="start" />
 
-            <Button
-                android:id="@+id/btnSeleccionarTemario"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_marginTop="4dp"
-                android:layout_gravity="start"
-                android:paddingHorizontal="16dp"
-                android:text="Seleccionar archivo"
-                android:textSize="14sp"
-                android:background="@drawable/rounded_button"
-                android:textColor="@color/white" />
+                    <EditText
+                        android:id="@+id/inputClave"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:padding="8dp"
+                        android:textSize="14sp"
+                        android:background="@drawable/rounded_edittxt"
+                        android:gravity="start"
+                        android:textColor="@color/black" />
 
-            <!-- Botón Agregar -->
-            <Button
-                android:id="@+id/btnAgregarMateria"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_marginTop="20dp"
-                android:padding="5dp"
-                android:text="Agregar materia"
-                android:textSize="16sp"
-                android:background="@drawable/rounded_button"
-                android:textColor="@color/white" />
+                    <!-- Nombre de la materia -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Nombre de la materia"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:gravity="start" />
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <EditText
+                            android:id="@+id/inputNombreMateria"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="8dp"
+                            android:textSize="14sp"
+                            android:background="@drawable/rounded_edittxt"
+                            android:gravity="start"
+                            android:textColor="@color/black" />
+                    </LinearLayout>
+
+                    <!-- Descripción de la materia -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Descripción de la materia"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:gravity="start" />
+
+                    <EditText
+                        android:id="@+id/inputDescripcionMateria"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:padding="8dp"
+                        android:textSize="14sp"
+                        android:background="@drawable/rounded_edittxt"
+                        android:gravity="start|top"
+                        android:inputType="textMultiLine"
+                        android:minLines="3"
+                        android:hint="Escribe la descripción de la materia"
+                        android:textColor="@color/black" />
+
+                    <!-- Semestre -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Semestre"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:gravity="start" />
+
+                    <EditText
+                        android:id="@+id/inputSemestre"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:inputType="number"
+                        android:padding="8dp"
+                        android:textSize="14sp"
+                        android:background="@drawable/rounded_edittxt"
+                        android:gravity="start"
+                        android:textColor="@color/black" />
+
+                    <!-- Temario -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Temario"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:gravity="start" />
+
+                    <Button
+                        android:id="@+id/btnSeleccionarTemario"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_gravity="start"
+                        android:paddingHorizontal="16dp"
+                        android:text="Seleccionar archivo"
+                        android:textSize="14sp"
+                        android:background="@drawable/rounded_button"
+                        android:textColor="@color/white" />
+
+                    <!-- Botón Agregar -->
+                    <Button
+                        android:id="@+id/btnAgregarMateria"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="20dp"
+                        android:padding="5dp"
+                        android:text="Agregar materia"
+                        android:textSize="16sp"
+                        android:background="@drawable/rounded_button"
+                        android:textColor="@color/white" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    </ScrollView>
 
     <!-- ProgressBar encima del contenido (inicialmente oculto) -->
     <ProgressBar
@@ -159,5 +207,4 @@
         android:layout_centerInParent="true"
         android:elevation="10dp"
         android:visibility="gone"/>
-
 </RelativeLayout>

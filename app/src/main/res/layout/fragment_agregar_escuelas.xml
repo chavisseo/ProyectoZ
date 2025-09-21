@@ -45,6 +45,24 @@
                         android:textColor="@color/black"
                         android:paddingBottom="12dp" />
 
+                    <!-- Escuela -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Escuela"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:gravity="start" />
+
+                    <Spinner
+                        android:id="@+id/spinnerEscuela"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/spinner_background"
+                        android:padding="8dp"
+                        android:spinnerMode="dropdown" />
+
                     <!-- Nombre -->
                     <TextView
                         android:layout_width="match_parent"
@@ -52,6 +70,7 @@
                         android:text="Nombre de la escuela"
                         android:textSize="14sp"
                         android:textColor="@color/black"
+                        android:layout_marginTop="12dp"
                         android:gravity="start" />
 
                     <EditText
@@ -59,6 +78,28 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
+                        android:padding="8dp"
+                        android:textSize="14sp"
+                        android:background="@drawable/rounded_edittxt"
+                        android:gravity="start"
+                        android:textColor="@color/black" />
+
+                    <!-- Número de Alumnos -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Número de alumnos"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="12dp"
+                        android:gravity="start" />
+
+                    <EditText
+                        android:id="@+id/inputNumeroAlumnos"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:inputType="number"
                         android:padding="8dp"
                         android:textSize="14sp"
                         android:background="@drawable/rounded_edittxt"
