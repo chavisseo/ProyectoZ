@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ProyectoZ</string>
+    <string name="app_name">EduActiv</string>
     <string name="olvideContrasena"><u>¿Olvidaste tu contraseña?</u></string>
     <string name="desc_imagenClases">Apartado de clases</string>
     <string name="desc_imagenPerfil">Apartado de perfil</string>
@@ -8,6 +8,19 @@
     <string name="desc_imagenAgregar">Agregar</string>
     <string name="desc_buscarMateria">Buscar materia</string>
     <string name="desc_imagenEscuelas">Apartado de Escuelas</string>
+    <string name="registrate"><u>¿No tienes una cuenta? Registrate aquí</u></string>
+    <string name="iniciaSesion"><u>¿Ya tienes una cuenta? Inicia sesión aquí</u></string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="niveles_escuela">
+        <item>Primaria</item>
+        <item>Secundaria</item>
+        <item>Preparatoria</item>
+        <item>Universidad</item>
+    </string-array>
+
+    <string-array name="tipos_escuela">
+        <item>Pública</item>
+        <item>Privada</item>
+    </string-array>
 </resources>

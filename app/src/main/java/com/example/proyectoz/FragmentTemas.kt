@@ -1,6 +1,8 @@
 package com.example.proyectoz
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -17,78 +19,76 @@ import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
-class FragmentClases : Fragment() {
+class FragmentTemas : Fragment(){
 
-    private var nombreEscuela: String? = null
     private lateinit var db: FirebaseFirestore
     private val listaNombres = mutableListOf<String>()
+    private val listaNumeros = mutableListOf<String>()
     private lateinit var container: LinearLayout
+    private var claveMateria: String? = null
     val userId = FirebaseAuth.getInstance().currentUser?.uid
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         db = FirebaseFirestore.getInstance()
-        val view = inflater.inflate(R.layout.fragment_clases, container, false)
-        this.container = view.findViewById(R.id.containerClases)
+        val view = inflater.inflate(R.layout.fragment_temas, container, false)
+        this.container = view.findViewById(R.id.containerTemas)
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val flAgregar = view.findViewById<FrameLayout>(R.id.flAgregar)
-        nombreEscuela = arguments?.getString("nombre")
-        (activity as? Menu)?.actualizarTextoInferior("Te encuentras dentro de $nombreEscuela")
-        (activity as? Menu)?.updateMenuHighlight("Clases")
+        claveMateria = arguments?.getString("clave")
+        (activity as? Menu)?.updateMenuHighlight("Actividades")
 
-        obtenerClases()
-
-        flAgregar.setOnClickListener {
-            // Ripple + navegación
-            val bundle = Bundle().apply {
-                putString("nombre", nombreEscuela)
-            }
-
-            val fragmentAgregarClases = FragmentAgregarClases()
-            fragmentAgregarClases.arguments = bundle
-
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, fragmentAgregarClases)
-                .addToBackStack(null)
-                .commit()
-        }
-
+        obtenerTemas()
+       // Toast.makeText(requireContext(), "Hola", Toast.LENGTH_SHORT).show()
 
     }
 
-    fun obtenerClases(){
-        db.collection("Clases")
+    fun obtenerTemas(){
+        
+        db.collection("Temas")
             .whereEqualTo("userId", userId)
             .get()
             .addOnSuccessListener { result ->
                 for (document in result){
-                    val carrera = document.getString("carrera")
-                    val escuela = document.getString("escuela")
+                    var contador = 1;
+                    val claveD = document.getString("clave")
+                    do{
 
-                    //Filtrar por escuela
-                    if(escuela!=null && escuela == nombreEscuela
-                        && carrera!=null && !listaNombres.contains(carrera)){
-                        listaNombres.add(carrera)
-                        //Agregar carrera a la lista
-                    }
+                        var texto = document.getString("$contador") ?: "alto"
+                        Log.d("prueba", "$claveD es igual a $claveMateria")
+                        if(texto != "alto" && !listaNombres.contains(texto) && claveD == claveMateria){
+                            listaNombres.add(texto)
+                            listaNumeros.add("Tema $contador")
+                            Log.d("prueba", "$contador: $texto")
+                        }
+                        contador++
+                    }while(texto != "alto")
+
+                   /* Log.d("prueba", "holaaa")
+                    tema1 = document.getString("1") ?: "nulo"
+                    Log.d("prueba", "Este $tema1")*/
                 }
 
-                //AgregarTarjetasDinamicas
                 if(isAdded){
-                    agregarTarjetasDinamicas(listaNombres, requireContext(), container)
+                    agregarTarjetasDinamicas(listaNumeros, requireContext(), container, listaNombres)
                 }
+
 
             }
+
+
+
+
     }
 
-    fun agregarTarjetasDinamicas(nombres: List<String>, contexto: android.content.Context, container: LinearLayout){
+    fun agregarTarjetasDinamicas(nombres: List<String>, contexto: Context, container: LinearLayout, temas: List<String>){
         val imagen = R.drawable.clasesbtn
 
         for(i in nombres.indices step 2){
@@ -104,11 +104,11 @@ class FragmentClases : Fragment() {
                 gravity = Gravity.CENTER
             }
 
-            fila.addView(crearCard(contexto, nombres[i], imagen))
+            fila.addView(crearCard(contexto, nombres[i], imagen, temas[i]))
 
             //Segunda tarjeta (si existe)
             if(i + 1 < nombres.size){
-                fila.addView(crearCard(contexto, nombres[i + 1], imagen))
+                fila.addView(crearCard(contexto, nombres[i + 1], imagen, temas[i + 1]))
             }else{
                 val espacio = Space(contexto).apply {
                     layoutParams = LinearLayout.LayoutParams(
@@ -123,9 +123,10 @@ class FragmentClases : Fragment() {
 
             container.addView(fila)
         }
+
     }
 
-    fun crearCard(context: android.content.Context, texto: String, imagenResId: Int): CardView {
+    fun crearCard(context: android.content.Context, texto: String, imagenResId: Int, temas: String): CardView {
         val heightInPx = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
             150f,
@@ -190,13 +191,14 @@ class FragmentClases : Fragment() {
         //On click que mandará a la siguiente vista
         frameLayout.setOnClickListener {
             val bundle = Bundle().apply {
-                putString("carrera", texto)
+                putString("clave", claveMateria)
+                putString("temario", temas)
             }
-            val fragmentMaterias = FragmentMaterias()
-            fragmentMaterias.arguments = bundle
+            val fragmentActividades = FragmentActividades()
+            fragmentActividades.arguments = bundle
 
             requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, fragmentMaterias)
+                .replace(R.id.fragmentContainer, fragmentActividades)
                 .addToBackStack(null)
                 .commit()
         }
@@ -211,4 +213,6 @@ class FragmentClases : Fragment() {
     fun Int.dpToPx(context: android.content.Context): Int {
         return (this * context.resources.displayMetrics.density).toInt()
     }
+
+
 }

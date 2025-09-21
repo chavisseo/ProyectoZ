@@ -7,64 +7,190 @@
     android:background="@color/colorPrimary"
     android:gravity="center">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardAgregarEscuela"
-        android:layout_width="370dp"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="8dp"
-        app:cardUseCompatPadding="true">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="center_horizontal"
-            android:padding="20dp">
+            android:gravity="center"
+            android:padding="16dp">
 
-            <!-- Título -->
-            <TextView
-                android:layout_width="wrap_content"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardAgregarEscuela"
+                android:layout_width="370dp"
                 android:layout_height="wrap_content"
-                android:text="Agregar escuela"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:paddingBottom="12dp" />
+                android:layout_centerInParent="true"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp"
+                app:cardUseCompatPadding="true">
 
-            <!-- Nombre -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Nombre"
-                android:textSize="14sp"
-                android:textColor="@color/black"
-                android:gravity="start" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    android:padding="20dp">
 
-            <EditText
-                android:id="@+id/inputNombreEscuela"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginTop="4dp"
-                android:padding="8dp"
-                android:textSize="14sp"
-                android:background="@drawable/rounded_edittxt"
-                android:gravity="start"
-                android:textColor="@color/black" />
+                    <!-- Título -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Agregar escuela"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:paddingBottom="12dp" />
 
-            <!-- Botón Agregar Escuela -->
-            <Button
-                android:id="@+id/btnAgregarEscuela"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_marginTop="20dp"
-                android:padding="5dp"
-                android:text="Agregar escuela"
-                android:textSize="16sp"
-                android:background="@drawable/rounded_button"
-                android:textColor="@color/white" />
+                    <!-- Nombre -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Nombre de la escuela"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:gravity="start" />
 
+                    <EditText
+                        android:id="@+id/inputNombreEscuela"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:padding="8dp"
+                        android:textSize="14sp"
+                        android:background="@drawable/rounded_edittxt"
+                        android:gravity="start"
+                        android:textColor="@color/black" />
+
+                    <!-- País -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="País"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="12dp"
+                        android:gravity="start" />
+
+                    <EditText
+                        android:id="@+id/inputPais"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:padding="8dp"
+                        android:textSize="14sp"
+                        android:background="@drawable/rounded_edittxt"
+                        android:gravity="start"
+                        android:textColor="@color/black" />
+
+                    <!-- Estado -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Estado"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="12dp"
+                        android:gravity="start" />
+
+                    <EditText
+                        android:id="@+id/inputEstado"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:padding="8dp"
+                        android:textSize="14sp"
+                        android:background="@drawable/rounded_edittxt"
+                        android:gravity="start"
+                        android:textColor="@color/black" />
+
+                    <!-- Municipio -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Municipio"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="12dp"
+                        android:gravity="start" />
+
+                    <EditText
+                        android:id="@+id/inputMunicipio"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:padding="8dp"
+                        android:textSize="14sp"
+                        android:background="@drawable/rounded_edittxt"
+                        android:gravity="start"
+                        android:textColor="@color/black" />
+
+                    <!-- Nivel -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Nivel"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="12dp"
+                        android:gravity="start" />
+
+                    <Spinner
+                        android:id="@+id/spinnerNivel"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/spinner_background"
+                        android:padding="8dp"
+                        android:spinnerMode="dropdown" />
+
+                    <!-- Tipo de escuela -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Tipo de escuela"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="12dp"
+                        android:gravity="start" />
+
+                    <Spinner
+                        android:id="@+id/spinnerTipo"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/spinner_background"
+                        android:padding="8dp"
+                        android:spinnerMode="dropdown" />
+
+                    <!-- Botón Agregar Escuela -->
+                    <Button
+                        android:id="@+id/btnAgregarEscuela"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="20dp"
+                        android:padding="5dp"
+                        android:text="Agregar escuela"
+                        android:textSize="16sp"
+                        android:background="@drawable/rounded_button"
+                        android:textColor="@color/white" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    </ScrollView>
+
+    <!-- ProgressBar encima del contenido (inicialmente oculto) -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:elevation="10dp"
+        android:visibility="gone"/>
+
 </RelativeLayout>

@@ -1,19 +1,21 @@
 package com.example.proyectoz
 
+import android.app.AlertDialog
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Button
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentManager
 
-class DialogMateriaAgregada : DialogFragment() {
+class DialogActividadGenerada : androidx.fragment.app.DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+
         // Inflas el layout
         val view = LayoutInflater.from(requireContext())
-            .inflate(R.layout.dialog_materia_agregada, null)
+            .inflate(R.layout.dialog_actividad_agregada, null)
 
         // Construyes el AlertDialog
         val dialog = AlertDialog.Builder(requireContext())
@@ -22,9 +24,11 @@ class DialogMateriaAgregada : DialogFragment() {
 
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
 
-        // Botón Aceptar: cierra el diálogo
+        //Boton aceptar: cierra el dialogo
         view.findViewById<Button>(R.id.btnAceptar)
-            .setOnClickListener { dismiss() }
+            .setOnClickListener {
+                dismiss()
+            }
 
         return dialog
 
@@ -32,7 +36,7 @@ class DialogMateriaAgregada : DialogFragment() {
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        // Al cerrar (Aceptar o BACK), volvemos al FragmentMenu
+
         requireActivity().supportFragmentManager.popBackStack()
     }
 }
