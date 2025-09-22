@@ -43,7 +43,12 @@ class FragmentMaterias : Fragment() {
 
         val flAgregar = view.findViewById<FrameLayout>(R.id.flAgregar)
         nombreCarrera = arguments?.getString("carrera")
-        (activity as? Menu)?.actualizarTextoInferior("Te encuentras dentro de $nombreCarrera")
+        if(nombreCarrera != null){
+            (activity as? Menu)?.actualizarTextoInferior("Te encuentras dentro de $nombreCarrera")
+        }else{
+            (activity as? Menu)?.actualizarTextoInferior("Estas viendo todas las materias")
+        }
+
         (activity as? Menu)?.updateMenuHighlight("Materias")
 
         //obtenerClases()
@@ -76,7 +81,15 @@ class FragmentMaterias : Fragment() {
                     val nombre = document.getString("nombre")
                     val clase = document.getString("clase")
                     val clave = document.getString("clave")
-                    if(clase!=null && clase == nombreCarrera
+
+
+
+                    if(nombreCarrera == null && clase != null && nombre != null && !listaNombres.contains(nombre)){
+                        listaNombres.add(nombre)
+                        if(clave != null){
+                            listaClaves.add(clave)
+                        }
+                    }else if(clase!=null && clase == nombreCarrera
                         && nombre!= null && !listaNombres.contains(nombre)){
                         listaNombres.add(nombre)
                         if(clave != null){

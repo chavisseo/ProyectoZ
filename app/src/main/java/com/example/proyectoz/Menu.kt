@@ -31,6 +31,10 @@ class Menu : AppCompatActivity() {
         val imagen = findViewById<ImageButton>(R.id.imageButton)
         val btnHome = findViewById<ImageButton>(R.id.btnHome)
 
+        val tvEscuelas = findViewById<TextView>(R.id.tvEscuelas)
+        val tvClases = findViewById<TextView>(R.id.tvClases)
+        val tvMaterias = findViewById<TextView>(R.id.tvMaterias)
+
 
 
         if (savedInstanceState == null){
@@ -58,6 +62,27 @@ class Menu : AppCompatActivity() {
             supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragmentContainer, FragmentEscuelas())
+                .commit()
+        }
+
+        tvClases.setOnClickListener {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, FragmentClases())
+                .addToBackStack(null)
+                .commit()
+        }
+
+        tvEscuelas.setOnClickListener {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, FragmentEscuelas())
+                .addToBackStack(null)
+                .commit()
+        }
+
+        tvMaterias.setOnClickListener {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, FragmentMaterias())
+                .addToBackStack(null)
                 .commit()
         }
 
