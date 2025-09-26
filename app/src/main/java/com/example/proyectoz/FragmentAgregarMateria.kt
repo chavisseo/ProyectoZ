@@ -8,8 +8,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
@@ -29,8 +27,6 @@ import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.coroutines.cancellation.CancellationException
-import android.widget.Spinner
-import androidx.core.widget.addTextChangedListener
 
 class FragmentAgregarMateria : Fragment() {
 
@@ -67,69 +63,12 @@ class FragmentAgregarMateria : Fragment() {
         val inputClave = view.findViewById<EditText>(R.id.inputClave)
         val inputNombre = view.findViewById<EditText>(R.id.inputNombreMateria)
         val inputSemestre = view.findViewById<EditText>(R.id.inputSemestre)
-        val inputDescripcion = view.findViewById<EditText>(R.id.inputDescripcionMateria)
         val btnSeleccionarTemario = view.findViewById<Button>(R.id.btnSeleccionarTemario)
-        val btnBorrarCampos = view.findViewById<Button>(R.id.btnBorrarCampos)
         val btnAgregarMateria = view.findViewById<Button>(R.id.btnAgregarMateria)
         val progressBar = view.findViewById<ProgressBar>(R.id.progressBar)
-        val spinnerMaterias = view.findViewById<Spinner>(R.id.spinnerMateriasRegistradas)
-        val listaMaterias = mutableListOf<Map<String, Any>>()
-        val nombresMaterias = mutableListOf<String>()
-        
-//        inputClave.addTextChangedListener { actualizarEstadoBorrar() }
-//        inputNombre.addTextChangedListener { actualizarEstadoBorrar() }
-//        inputDescripcion.addTextChangedListener { actualizarEstadoBorrar() }
-//        inputSemestre.addTextChangedListener { actualizarEstadoBorrar() }
-
         nombreClase = arguments?.getString("carrera")
 
         obtenerClaves()
-
-        cargarMaterias(spinnerMaterias, nombresMaterias, listaMaterias)
-
-
-//        btnBorrarCampos.isEnabled = false
-
-        btnBorrarCampos.setOnClickListener {
-            inputClave.text.clear()
-            inputNombre.text.clear()
-            inputDescripcion.text.clear()
-            inputSemestre.text.clear()
-            spinnerMaterias.setSelection(0)
-//            actualizarEstadoBorrar() // deshabilita el botón
-            Toast.makeText(requireContext(), "Campos limpiados, selecciona o registra una nueva materia", Toast.LENGTH_SHORT).show()
-        }
-
-
-        spinnerMaterias.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                if (position > 0 && position - 1 < listaMaterias.size) { // 🔹 Omitimos la opción "Selecciona una materia"
-                    val materiaSeleccionada = listaMaterias[position - 1]
-
-                    inputClave.setText(materiaSeleccionada["clave"] as? String ?: "")
-                    inputNombre.setText(materiaSeleccionada["nombre"] as? String ?: "")
-                    inputDescripcion.setText(materiaSeleccionada["descripcion"] as? String ?: "")
-                    inputSemestre.setText(materiaSeleccionada["semestre"] as? String ?: "")
-                } else {
-                    // Si selecciona la opción default, limpiamos campos
-                    inputClave.text.clear()
-                    inputNombre.text.clear()
-                    inputDescripcion.text.clear()
-                    inputSemestre.text.clear()
-                }
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {}
-            //no hace nada
-        }
-
-//        spinnerMaterias.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-//            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-//                actualizarEstadoBorrar() // actualiza el estado del botón
-//            }
-//            override fun onNothingSelected(parent: AdapterView<*>) {}
-//        }
-
 
         btnSeleccionarTemario.setOnClickListener {
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
@@ -144,7 +83,6 @@ class FragmentAgregarMateria : Fragment() {
             val clave = inputClave.text.toString().trim()
             val nombre = inputNombre.text.toString().trim()
             val semestre = inputSemestre.text.toString().trim()
-            val descripcion = inputDescripcion.text.toString().trim()
             val uri = selectedPdfUri
 
             if (archivoSeleccionado == false) {
@@ -152,21 +90,19 @@ class FragmentAgregarMateria : Fragment() {
                 return@setOnClickListener
             }
 
-            if (clave.isNotEmpty() && nombre.isNotEmpty() && descripcion.isNotEmpty() && semestre.isNotEmpty() && nombreClase != null) {
+            if (clave.isNotEmpty() && nombre.isNotEmpty() && semestre.isNotEmpty() && nombreClase != null) {
                 btnSeleccionarTemario.isEnabled = false
                 btnAgregarMateria.isEnabled = false
-                btnBorrarCampos.isEnabled = false
                 progressBar.visibility = View.VISIBLE
-
 
                 if(listaClaves.contains(clave)){
                     Toast.makeText(requireContext(), "Ya hay una materia con esta clave", Toast.LENGTH_SHORT).show()
                     btnSeleccionarTemario.isEnabled = true
                     btnAgregarMateria.isEnabled = true
-                    btnBorrarCampos.isEnabled = true
                     progressBar.visibility = View.GONE
-                        return@setOnClickListener
+                    return@setOnClickListener
                 }
+
 
                 generarTemario(uri!!) {
 
@@ -174,7 +110,6 @@ class FragmentAgregarMateria : Fragment() {
                         Toast.makeText(requireContext(), "El archivo ingresado no es un temario", Toast.LENGTH_SHORT).show()
                         btnSeleccionarTemario.isEnabled = true
                         btnAgregarMateria.isEnabled = true
-                        btnBorrarCampos.isEnabled = true
                         progressBar.visibility = View.GONE
                         return@generarTemario
                     }
@@ -184,21 +119,11 @@ class FragmentAgregarMateria : Fragment() {
                         Toast.makeText(requireContext(), "Tiempo de espera agotado", Toast.LENGTH_SHORT).show()
                         btnSeleccionarTemario.isEnabled = true
                         btnAgregarMateria.isEnabled = true
-                        btnBorrarCampos.isEnabled = true
                         progressBar.visibility = View.GONE
                         return@generarTemario
                     }
 
 
-                    //if de  la descripcion
-                    if (descripcion.isEmpty()) {
-                        Toast.makeText(requireContext(), "Ingresa una descripción", Toast.LENGTH_SHORT).show()
-                        btnSeleccionarTemario.isEnabled = true
-                        btnAgregarMateria.isEnabled = true
-                        btnBorrarCampos.isEnabled = true
-                        progressBar.visibility = View.GONE
-                        return@generarTemario
-                    }
 
                     val hash = listaTemas.mapIndexed { index, elemento ->
                         (index + 1).toString() to elemento
@@ -211,7 +136,6 @@ class FragmentAgregarMateria : Fragment() {
                         "clave" to clave,
                         "nombre" to nombre,
                         "semestre" to semestre,
-                        "descripcion" to descripcion,
                         "clase" to nombreClase,
                         "temario" to listaTemas.joinToString("\n"),
                         "userId" to userId
@@ -376,32 +300,4 @@ Tu análisis debe abarcar minuciosamente todas las páginas del documento para n
                 }
             }
     }
-
-
-    fun cargarMaterias(spinner: Spinner, nombres: MutableList<String>, materias: MutableList<Map<String, Any>>) {
-        db.collection("Materias")
-            .whereEqualTo("userId", userId)
-            .get()
-            .addOnSuccessListener { result ->
-                nombres.clear()
-                materias.clear()
-
-                // Agregamos la opción inicial
-                nombres.add("Selecciona una materia")
-
-                for (document in result) {
-                    val materiaData = document.data
-                    materias.add(materiaData)
-                    nombres.add(materiaData["nombre"] as String? ?: "Sin nombre")
-                }
-
-                val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, nombres)
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                spinner.adapter = adapter
-            }
-            .addOnFailureListener {
-                Toast.makeText(requireContext(), "Error al cargar materias: ${it.message}", Toast.LENGTH_SHORT).show()
-            }
-    }
-
 }

@@ -35,6 +35,7 @@ class FragmentAgregarClases : Fragment() {
         val inputCarrera = view.findViewById<EditText>(R.id.inputCarrera)
         val inputSemestre  = view.findViewById<EditText>(R.id.inputSemestre)
         val inputGrupo = view.findViewById<EditText>(R.id.inputGrupo)
+        //hola
         val inputEscuela = view.findViewById<EditText>(R.id.inputEscuela)
         val progressBar = view.findViewById<ProgressBar>(R.id.progressBar)
         nombreEscuela = arguments?.getString("nombre")
