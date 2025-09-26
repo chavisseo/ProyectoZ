@@ -36,6 +36,9 @@ class FragmentAgregarClases : Fragment() {
         val inputSemestre  = view.findViewById<EditText>(R.id.inputSemestre)
         val inputGrupo = view.findViewById<EditText>(R.id.inputGrupo)
         val inputEscuela = view.findViewById<EditText>(R.id.inputEscuela)
+        val inputNumAlumnos = view.findViewById<EditText>(R.id.inputNumAlumnos)
+        val inputActitud = view.findViewById<EditText>(R.id.inputActitud)
+        val inputHabilidadesBlandas = view.findViewById<EditText>(R.id.inputHabilidadesBlandas)
         val progressBar = view.findViewById<ProgressBar>(R.id.progressBar)
         nombreEscuela = arguments?.getString("nombre")
 
@@ -48,8 +51,11 @@ class FragmentAgregarClases : Fragment() {
             val semestre = inputSemestre.text.toString().trim()
             val grupo = inputGrupo.text.toString().trim()
             val escuela = inputEscuela.text.toString().trim()
+            val NumAlumnos = inputNumAlumnos.text.toString().trim()
+            val Actitud = inputActitud.text.toString().trim()
+            val HabilidadesBlandas = inputHabilidadesBlandas.text.toString().trim()
 
-            if (carrera.isNotEmpty() && semestre.isNotEmpty() && grupo.isNotEmpty() && escuela.isNotEmpty()) {
+            if (carrera.isNotEmpty() && semestre.isNotEmpty() && grupo.isNotEmpty() && escuela.isNotEmpty() && NumAlumnos.isNotEmpty() && Actitud.isNotEmpty() && HabilidadesBlandas.isNotEmpty() ) {
                 btnAgregarClase.isEnabled = false
                 progressBar.visibility = View.VISIBLE
 
@@ -69,7 +75,11 @@ class FragmentAgregarClases : Fragment() {
                                 "semestre" to semestre,
                                 "grupo" to grupo,
                                 "escuela" to escuela,
+                                "NumAlumnos" to NumAlumnos,
+                                "Actitud" to Actitud,
+                                "HabilidadesBlandas" to HabilidadesBlandas,
                                 "userId" to userId
+
                             )
 
                             db.collection("Clases")
